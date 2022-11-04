@@ -9,9 +9,22 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.2.41"
+    "animate.css": "^4.1.1",
+    "bootstrap": "^5.2.2",
+    "country-calling-code": "^0.0.3",
+    "flag-icons": "^6.6.6",
+    "gsap": "^3.11.3",
+    "pinia": "^2.0.23",
+    "sass": "^1.56.0",
+    "tsparticles": "^2.5.1",
+    "tsparticles-engine": "^2.5.0",
+    "vue": "^3.2.41",
+    "vue-router": "^4.1.6",
+    "vue3-particles": "^2.5.1"
   },
   "devDependencies": {
+    "@arco-design/color": "^0.4.0",
+    "@arco-design/web-vue": "^2.38.0",
     "@vitejs/plugin-vue": "^3.2.0",
     "typescript": "^4.6.4",
     "vite": "^3.2.0",
