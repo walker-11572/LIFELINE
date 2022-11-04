@@ -1,5 +1,19 @@
-import { createApp } from 'vue'
-import './style.css'
-import App from './App.vue'
-
-createApp(App).mount('#app')
+import { createApp } from "vue";
+import {createPinia} from "pinia";
+import ArcoVue from "@arco-design/web-vue";
+import ArcoVueIcon from '@arco-design/web-vue/es/icon';
+import Particles from "vue3-particles";
+// import mavonEditor from "mavon-editor";
+import router from "./router";
+import App from './App.vue';
+import "@arco-design/web-vue/dist/arco.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+// import "mavon-editor/dist/css/index.css";
+const app = createApp(App);
+app.use(ArcoVue);
+app.use(ArcoVueIcon);
+app.use(createPinia());
+app.use(Particles);
+// app.use(mavonEditor);
+app.use(router);
+app.mount("#app");
