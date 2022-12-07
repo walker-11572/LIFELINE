@@ -41,7 +41,7 @@
       @click="ChangeTab('trending')"
       :class="{ active: isActive.trending }"
     >
-    分类
+      分类
     </a-col>
     <!-- 搜索 -->
     <a-col class="ms-4" :lg="{ span: 7 }" :xxl="{ span: 5 }">

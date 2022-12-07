@@ -5,7 +5,7 @@
         <!-- #region 标题 -->
         <a-row class="mt-1">
           <a-col>
-            <h5>Web Hosting Packages for ThemeForest WordPress</h5>
+            <h2 class="fw-bold">{{ store.topic.title }}</h2>
           </a-col>
         </a-row>
         <!-- #endregion -->
@@ -37,25 +37,7 @@
         <!-- #region 正文 -->
         <a-row>
           <a-col :span="24">
-            <!-- <div v-html="handledBody"></div> -->
-            <h5 id="h-1">Get ready for Movember!</h5>
-            <p>
-              It&rsquo;s time to channel your inner Magnum P.I., Ron Swanson or
-              Hercule Poroit! It&rsquo;s the time that all guys (or gals) love
-              and all our partners hate It&rsquo;s Movember!
-            </p>
-            <p>
-              Throughout November we will be inviting all community members
-              tohelp raise awareness and funds for the lives of men affected by
-              cancer and mental health problems via the Movember Foundation 10.
-            </p>
-            <h5 id="h-2">How Does it Work?</h5>
-            <p>
-              Authors and customers with facial hair unite! Simply grow,
-              groom,and share your facial hair during November! Even females can
-              enterif they desire (be creative, ladies!). Be inspired by
-              checking outlast year&rsquo;s highlights 28.
-            </p>
+            <div v-html="handleBody()"></div>
           </a-col>
         </a-row>
         <!-- #endregion -->
@@ -245,21 +227,6 @@
     Category="politics"
     :ExtraInfos="ExtraInfos"
   />
-  <PostCard
-    Topic="Halloween Costume Contest 2018"
-    Category="politics"
-    :ExtraInfos="ExtraInfos"
-  />
-  <PostCard
-    Topic="Halloween Costume Contest 2018"
-    Category="politics"
-    :ExtraInfos="ExtraInfos"
-  />
-  <PostCard
-    Topic="Halloween Costume Contest 2018"
-    Category="politics"
-    :ExtraInfos="ExtraInfos"
-  />
   <!-- #endregion -->
 </template>
 <script setup lang="ts">
@@ -270,13 +237,14 @@ import PostCard from "@/components/Community/PostCard.vue";
 import Contents from "@/components/Community/Mulu.vue";
 import { reactive, ref, onMounted, onBeforeUnmount } from "vue";
 import prism from "prismjs";
+import { mainStore } from "@/store/index";
+const store = mainStore();
 const topic = reactive({
-  title: "",
   time: "",
   user: "",
   category: "politics",
   tags: ["world politics", "human rights"],
-  body: "<h5>Get ready for Movember!</h5><p>It&rsquo;s time to channel your inner Magnum P.I., Ron Swanson or Hercule Poroit! It&rsquo;s the time that all guys (or gals) love and all our partners hate It&rsquo;s Movember!</p><p>Throughout November we will be inviting all community members tohelp raise awareness and funds for the lives of men affected by cancer and mental health problems via the Movember Foundation 10.</p><h5>How Does it Work?</h5><p>Authors and customers with facial hair unite! Simply grow, groom,and share your facial hair during November! Even females can enterif they desire (be creative, ladies!). Be inspired by checking outlast year&rsquo;s highlights 28.</p>",
+  body: store.topic.body,
   extraInfo: {},
   replyCount: "111",
 });
@@ -288,18 +256,23 @@ const ExtraInfos = reactive({
   Activity: "1h",
 });
 const newReply = ref("");
+console.log(store.topic.body);
 // #region 获取&处理文章标题
-let handledBody = "";
-let a = topic.body.match(/<h[1-6]>([\s\S]*?)<\/h[1-6]>/g) || [];
-let b = new Array();
-a?.forEach((item, index, arr) => {
-  b[index] =
-    item.slice(0, 3) + " id=" + '"' + `h-${index + 1}` + '"' + item.slice(3);
-  handledBody = topic.body.replace(a[0], b[0]);
-  for (let i = 0; i < a?.length; i++) {
-    handledBody = handledBody.replace(a[i], b[i]);
-  }
-});
+let a = store.topic.body.match(/<h[1-6]>([\s\S]*?)<\/h[1-6]>/g) || [];
+function handleBody() {
+  let handledBody = "";
+  let b = new Array();
+  a?.forEach((item, index, arr) => {
+    b[index] =
+      item.slice(0, 3) + " id=" + '"' + `h-${index + 1}` + '"' + item.slice(3);
+    handledBody = store.topic.body.replace(a[0], b[0]);
+    for (let i = 0; i < a?.length; i++) {
+      handledBody = handledBody.replace(a[i], b[i]);
+    }
+  });
+  return handledBody;
+}
+
 // #endregion
 // #region 目录出现&隐藏
 var contentsVisibility = ref(true);

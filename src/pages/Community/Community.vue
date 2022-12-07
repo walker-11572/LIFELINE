@@ -8,7 +8,7 @@
       style="top: 60px"
       class="position-absolute pe-xxl-3"
     >
-      <router-view></router-view>
+      <router-view />
     </a-col>
   </a-row>
 </template>
