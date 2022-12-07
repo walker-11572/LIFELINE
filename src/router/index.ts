@@ -4,8 +4,9 @@ export default createRouter({
   routes: [
     {
       path: "/",
-      name: "Lines",
-      component: () => import("@/pages/Lines.vue"),
+      redirect: '/community',
+      name: "Lines/community",
+      // component: () => import("@/pages/Community/Community.vue"),
     },
     {
       path: "/login",
@@ -58,11 +59,6 @@ export default createRouter({
           component: () => import("@/pages/Community/CreateTopic.vue"),
         }
       ],
-    },
-    {
-      path: "/tools",
-      name: "Tools",
-      component: () => import("@/pages/Tools.vue"),
     },
   ],
 });
