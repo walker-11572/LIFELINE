@@ -1,7 +1,7 @@
 <template>
   <a-row style="height: 100px" align="center" class="px-5">
     <a-col :span="2">
-      <CategoryTag Category="politics" />
+      <CategoryTag Category="politics" size="large" />
     </a-col>
     <a-col :span="3" :offset="12">Threads - {{ Threads }}</a-col>
     <a-col :span="1">
