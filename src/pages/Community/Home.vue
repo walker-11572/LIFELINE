@@ -22,7 +22,7 @@
   </a-row>
   <!-- 帖子 -->
   <PostCard
-    Topic="Halloween Costume Contest 2018"
+    :Topic="store.topic.title"
     Category="politics"
     :ExtraInfos="ExtraInfos"
   />
@@ -30,10 +30,12 @@
 <script setup lang="ts">
 import PostCard from "@/components/Community/PostCard.vue";
 import { reactive } from "vue";
+import { mainStore } from "@/store/index";
+const store = mainStore();
 const ExtraInfos = reactive({
-  Likes: 985,
-  Replies: 502,
-  Views: 15,
+  Likes: 120,
+  Replies: 15,
+  Views: 985,
   Activity: "1h",
 });
 </script>

@@ -1,42 +1,125 @@
 <template>
-  <a-row class="Container px-5" align="center">
-    <a-col :span="1"><a-avatar>A</a-avatar></a-col>
-    <a-col :offset="1" :span="10">
-      <router-link to="/community/singleBlog" class="router-link">
-        {{ props.Topic }}
-      </router-link>
-    </a-col>
-    <a-col :span="4">
-      <CategoryTag :Category="props.Category" />
-    </a-col>
-    <a-col :span="2">{{ props.ExtraInfos.Likes }}</a-col>
-    <a-col :span="2">{{ props.ExtraInfos.Replies }}</a-col>
-    <a-col :span="2">{{ props.ExtraInfos.Views }}</a-col>
-    <a-col :span="2">{{ props.ExtraInfos.Activity }}</a-col>
-  </a-row>
+  <a-col :span="18" class="Container px-4 pt-3">
+    <!--#region 用户、时间、标签、分类 -->
+    <a-row class="mb-2" align="center" justify="space-between">
+      <div class="d-flex align-items-center">
+        <div class="user">dylan89</div>
+        <a-divider direction="vertical" />
+        <div class="time">17分钟前</div>
+        <a-divider direction="vertical" />
+        <div><CategoryTag :Category="props.Category" v-if="!showTag"/></div>
+      </div>
+      <div class="d-flex align-items-center">
+        <a-tag :bordered="true">博文</a-tag>
+      </div>
+    </a-row>
+    <!-- #endregion -->
+    <a-row align="end">
+      <a-col :span="18">
+        <router-link to="/community/singleBlog" class="router-link">
+          {{ props.Topic }}
+        </router-link>
+        <a-typography-paragraph ellipsis class="text">
+          {{ getText() }}
+        </a-typography-paragraph>
+        <!--#region views、likes、replies -->
+        <a-row align="center">
+          <div class="info"
+            ><icon-eye class="me-1" :size="18" :strokeWidth="2" />
+            <span>{{ props.ExtraInfos.Views }}</span>
+          </div>
+          <div class="info">
+            <icon-thumb-up class="me-1" :size="16" :strokeWidth="2" />
+            <span>{{ props.ExtraInfos.Likes }}</span>
+          </div>
+          <div class="info">
+            <icon-message class="me-1" :size="16" :strokeWidth="2" />
+            <span>{{ props.ExtraInfos.Replies }}</span>
+          </div>
+          <div class="info"
+            ><span>{{ props.ExtraInfos.Activity }}</span>
+          </div>
+        </a-row>
+        <!-- #endregion -->
+      </a-col>
+      <a-col :span="5" :offset="1">
+        <img src="/2.png" class="img" />
+      </a-col>
+    </a-row>
+  </a-col>
 </template>
 
 <script setup lang="ts">
 import CategoryTag from "@/components/community/CategoryTag.vue";
+import { mainStore } from "@/store/index";
+import { useRoute } from "vue-router";
+const route = useRoute();
+var showTag = route.path.includes("categorySingle");
+const store = mainStore();
 const props = defineProps({
   Topic: String,
   Category: String,
   ExtraInfos: Object,
 });
+let text = store.topic.body;
+function getText() {
+  if (!text) {
+    return;
+  }
+  return text.replace(/<[^<>]+>/g, " ").slice(0, 200);
+}
 </script>
 
 <style lang="scss" scoped>
 .Container {
-  height: 100px;
+  // height: 100px;
   background-color: var(--color-bg-2);
   color: var(--color-neutral-10);
+  padding-bottom: 18px;
 }
-.router-link{
+.router-link {
   text-decoration: none;
   color: var(--color-neutral-10);
   transition: all 0.3s;
-  &:hover{
+  &:hover {
     color: rgb(var(--arcoblue-6));
   }
+  font-weight: bold;
+}
+.user {
+  color: var(--color-neutral-7);
+  font-size: 13px;
+}
+.time {
+  color: var(--color-neutral-6);
+  font-size: 12.5px;
+}
+.info {
+  border: transparent;
+  background-color: transparent;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0;
+  margin-right: 18px;
+  color: var(--color-neutral-8);
+  transition: all 0.5s;
+  span {
+    font-size: 13px;
+    line-height: 100%;
+  }
+}
+.text {
+  color: var(--color-neutral-6);
+  font-size: 13px;
+  margin-top: 8px;
+  text-overflow: ellipsis;
+  margin-bottom: 10px;
+}
+.img {
+  height: 80px;
+  background-color: var(--color-bg-2);
+  border-radius: 2.5px;
+  float: right;
 }
 </style>
