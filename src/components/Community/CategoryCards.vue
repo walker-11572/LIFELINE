@@ -1,7 +1,7 @@
 <template>
   <a-card :bordered="false" class="p-3">
     <a-row justify="space-between" align="center" class="mb-4">
-      <a-col :span="12"><CategoryBadge Category="politics" /></a-col>
+      <a-col :span="12"><CategoryTag Category="politics" /></a-col>
       <a-col :span="12" class="text-end">Threads - {{ Threads }}</a-col>
     </a-row>
     <a-typography-paragraph style="font-size: 16px"
@@ -12,11 +12,11 @@
       >Similar TAGS</a-typography-paragraph
     >
     <a-space wrap
-      ><CategoryBadge Category="world politics" />
-      <CategoryBadge Category="human rights" />
-      <CategoryBadge Category="trump" />
-      <CategoryBadge Category="climate change" />
-      <CategoryBadge Category="foreign policy" />
+      ><CategoryTag Category="world politics" />
+      <CategoryTag Category="human rights" />
+      <CategoryTag Category="trump" />
+      <CategoryTag Category="climate change" />
+      <CategoryTag Category="foreign policy" />
     </a-space>
     <a-row class="mt-3">
       <a-button type="text">
@@ -40,7 +40,7 @@
   </a-card>
 </template>
 <script setup lang="ts">
-import CategoryBadge from "./CategoryBadge.vue";
+import CategoryTag from "./CategoryTag.vue";
 import { ref } from "vue";
 const Threads = ref(1234);
 </script>

@@ -1,7 +1,7 @@
 <template>
   <a-row style="height: 100px" align="center" class="px-5">
     <a-col :span="2">
-      <CategoryBadge Category="politics" Type="primary" />
+      <CategoryTag Category="politics" />
     </a-col>
     <a-col :span="3" :offset="12">Threads - {{ Threads }}</a-col>
     <a-col :span="1">
@@ -34,18 +34,18 @@
     >Similar TAGS</a-typography-paragraph
   >
   <a-space wrap class="px-5"
-    ><CategoryBadge Category="world politics" />
-    <CategoryBadge Category="human rights" />
-    <CategoryBadge Category="trump" />
-    <CategoryBadge Category="climate change" />
-    <CategoryBadge Category="foreign policy" />
+    ><CategoryTag Category="world politics" />
+    <CategoryTag Category="human rights" />
+    <CategoryTag Category="trump" />
+    <CategoryTag Category="climate change" />
+    <CategoryTag Category="foreign policy" />
   </a-space>
   <a-row justify="center">
     <a-col :span="23" class="px-4"><a-divider /></a-col>
   </a-row>
   <!-- 帖子列表头 -->
   <a-row
-    style="height: 40px; color: var(--color-neutral-8);font-size: 14px;"
+    style="height: 40px; color: var(--color-neutral-8); font-size: 14px"
     align="start"
     class="px-5"
   >
@@ -56,19 +56,23 @@
     <a-col :span="2">Views</a-col>
     <a-col :span="2">Activity</a-col>
   </a-row>
-  <PostCard Topic="Halloween Costume Contest 2018" Category="politics" :ExtraInfos="ExtraInfos"/>
+  <PostCard
+    Topic="Halloween Costume Contest 2018"
+    Category="politics"
+    :ExtraInfos="ExtraInfos"
+  />
 </template>
 <script setup lang="ts">
-import CategoryBadge from "@/components/Community/CategoryBadge.vue";
+import CategoryTag from "@/components/Community/CategoryTag.vue";
 import PostCard from "@/components/Community/PostCard.vue";
-import { ref,reactive} from "vue";
+import { ref, reactive } from "vue";
 const Threads = ref(1234);
 const ExtraInfos = reactive({
-    Likes:985,
-    Replies:502,
-    Views:15,
-    Activity:"1h"
-  })
+  Likes: 985,
+  Replies: 502,
+  Views: 15,
+  Activity: "1h",
+});
 </script>
 <style>
 .btn-icon {

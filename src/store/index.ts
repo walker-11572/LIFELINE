@@ -1,12 +1,12 @@
-import { defineStore} from 'pinia'
+import { defineStore } from "pinia";
 
-export const mainStore = defineStore('main',{
-  state:()=>{
+export const mainStore = defineStore("main", {
+  state: () => {
     return {
-      theme: 'light',
-      newlineType: '',
-    }
+      theme: "light",
+      newlineType: "",
+    };
   },
-  getters:{},
-  actions:{}
-})
+  getters: {},
+  actions: {},
+});

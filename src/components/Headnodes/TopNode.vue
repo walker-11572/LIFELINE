@@ -40,11 +40,11 @@ const tips = reactive({
     content: "从出生到过世，记录并规划你的每一天",
   },
 });
-const iconSrc = ref("public/timeline.svg");
+const iconSrc = ref("/timeline.svg");
 const tipTitle = ref(tips.timeline.title);
 const tipContent = ref(tips.timeline.content);
 if (props.lineType === "progressline") {
-  iconSrc.value = "public/progressline.svg";
+  iconSrc.value = "/progressline.svg";
   tipTitle.value = tips.progressline.title;
   tipContent.value = tips.progressline.content;
 } else if (props.lineType === "lifeline") {

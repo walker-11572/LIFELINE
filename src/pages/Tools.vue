@@ -5,5 +5,5 @@
 </template>
 <script setup lang="ts">
 import Particles from "@/components/Particles/index.vue";
-import Header from "@/pages/Header.vue";
+import Header from "@/components/Header.vue";
 </script>

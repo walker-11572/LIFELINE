@@ -1,5 +1,5 @@
 <template>
-  <a-row class="menu" align="center">
+  <a-row class="menu" align="center" id="header" @onscroll="hide">
     <!-- LOGO -->
     <a-col :lg="{ span: 3, offset: 3 }" :xxl="{ span: 3, offset: 4 }">
       <router-link to="/">
@@ -25,23 +25,23 @@
     >
       首页
     </a-col>
-    <!-- 分类 -->
+    <!-- 版块 -->
     <a-col
       :span="1"
       class="nav-text"
       @click="ChangeTab('category')"
       :class="{ active: isActive.category }"
     >
-      分类
+      版块
     </a-col>
-    <!-- 趋势 -->
+    <!-- 分类 -->
     <a-col
       :span="1"
       class="nav-text"
       @click="ChangeTab('trending')"
       :class="{ active: isActive.trending }"
     >
-      趋势
+    分类
     </a-col>
     <!-- 搜索 -->
     <a-col class="ms-4" :lg="{ span: 7 }" :xxl="{ span: 5 }">
@@ -151,10 +151,15 @@
     <!-- 发布话题 -->
     <a-col :span="1" :offset="2" class="d-flex justify-content-end">
       <a-dropdown trigger="hover">
-        <a-button type="primary" shape="circle" size="large" @click="CreateTopic()">
+        <a-button
+          type="primary"
+          shape="circle"
+          size="large"
+          @click="CreateTopic()"
+        >
           <template #icon>
-          <icon-plus :style="{ fontSize: '23px' }" />
-        </template>
+            <icon-plus :style="{ fontSize: '23px' }" />
+          </template>
         </a-button>
         <template #content>
           <a-doption
@@ -173,9 +178,8 @@
 </template>
 
 <script setup lang="ts">
-import router from "@/router";
-import { ref, reactive, watch } from "vue";
-import { Router } from "vue-router";
+import { ref, reactive, watch, onMounted, onBeforeUnmount } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import { mainStore } from "@/store/index";
 const props = defineProps({
   page: String,
@@ -185,24 +189,17 @@ let isActive = reactive({
   category: false,
   trending: false,
 });
+const router = useRouter();
+const route = useRoute();
 const store = mainStore();
 const MyTheme = ref(store.theme);
 function ChangeTab(id: string) {
   if (id === "index") {
     router.push("/community/home");
-    isActive.index = true;
-    isActive.category = false;
-    isActive.trending = false;
   } else if (id === "category") {
     router.push("/community/category");
-    isActive.index = false;
-    isActive.category = true;
-    isActive.trending = false;
   } else if (id === "trending") {
     router.push("/community/trending");
-    isActive.index = false;
-    isActive.category = false;
-    isActive.trending = true;
   }
 }
 function ChangeTheme(value: string) {
@@ -215,8 +212,8 @@ function ToggleTheme() {
     store.theme = "light";
   }
 }
-function CreateTopic(){
-  router.push("/community/CreateTopic")
+function CreateTopic() {
+  router.push("/community/CreateTopic");
 }
 watch(
   () => store.theme,
@@ -243,6 +240,59 @@ watch(
     }
   }
 );
+// tab activity 切换
+watch(
+  () => route.path,
+  (val) => {
+    switch (val) {
+      default: {
+        isActive.index = false;
+        isActive.category = false;
+        isActive.trending = false;
+        break;
+      }
+      case "/community/home": {
+        isActive.index = true;
+        isActive.category = false;
+        isActive.trending = false;
+        break;
+      }
+      case "/community/category": {
+        isActive.index = false;
+        isActive.category = true;
+        isActive.trending = false;
+        break;
+      }
+      case "/community/trending": {
+        isActive.index = false;
+        isActive.category = false;
+        isActive.trending = true;
+        break;
+      }
+    }
+  }
+);
+// #region header出现&隐藏
+let lastScrollY = 0;
+function hide() {
+  //记录滚动条高度，以判断是否隐藏
+  var header = document.getElementById("header");
+  if (window.scrollY - lastScrollY > 0 && window.scrollY > 150) {
+    //往下滚动，隐藏导航栏
+    header.style.top = "-60px";
+  } else if (window.scrollY < lastScrollY) {
+    //往上滚动，显示导航栏
+    header.style.top = "0px";
+  }
+  lastScrollY = window.scrollY;
+}
+onMounted(() => {
+  window.addEventListener("scroll", hide, true);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener("scroll", hide, true);
+});
+//#endregion
 </script>
 
 <style scoped>
@@ -253,8 +303,9 @@ watch(
   border-bottom: 1px solid var(--color-neutral-3);
   position: fixed;
   top: 0;
-  z-index: 1;
+  z-index: 10;
   background-color: var(--color-bg-1);
+  transition: top 0.5s;
 }
 
 .nav-btn {

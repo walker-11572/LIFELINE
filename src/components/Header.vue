@@ -21,7 +21,7 @@
       @click="ChangeTab('tools')"
       :class="{ active: isActive.tools }"
     >
-      规划工具
+      工具箱
     </a-col>
     <a-col
       :span="2"
@@ -144,9 +144,8 @@
 </template>
 
 <script setup lang="ts">
-import router from "@/router";
+import router from "../router";
 import { ref, reactive, watch } from "vue";
-import { Router } from "vue-router";
 import { mainStore } from "../store/index";
 const props = defineProps({
   page: String,

@@ -79,7 +79,7 @@
 <script setup lang="ts">
 import level from "province-city-china/dist/level.json";
 import Particles from "@/components/Particles/index.vue";
-import Header from "@/pages/Header.vue";
+import Header from "@/components/Header.vue";
 import Createline from "../components/CreateLine/CreateLine.vue";
 import LHeadNode from "../components/Headnodes/LHeadNode.vue";
 import TopNode from "../components/Headnodes/TopNode.vue";

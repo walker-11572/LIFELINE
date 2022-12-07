@@ -23,7 +23,8 @@ export default createRouter({
       component: () => import("@/pages/Community/Community.vue"),
       children: [
         {
-          path: "",
+          path: '',
+          name: "Community",
           component: () => import("@/pages/Community/Home.vue"),
         },
         {
@@ -32,12 +33,18 @@ export default createRouter({
           component: () => import("@/pages/Community/Home.vue"),
         },
         {
+          path:"singleBlog",
+          name:"Community/SingleBlog",
+          component: () => import("@/pages/Community/SingleBlog.vue"),
+        },
+        {
           path: "category",
           name: "Community/Categories",
           component: () => import("@/pages/Community/Categories.vue"),
         },
         {
           path: "categorySingle",
+          name: "Community/categorySingle",
           component: () => import("@/pages/Community/CategorySingle.vue"),
         },
         {
