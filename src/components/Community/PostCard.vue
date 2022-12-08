@@ -1,5 +1,5 @@
 <template>
-  <a-col :span="18" class="Container px-4 pt-3">
+  <div class="Container px-4 pt-3">
     <!--#region 用户、时间、标签、分类 -->
     <a-row class="mb-2" align="center" justify="space-between">
       <div class="d-flex align-items-center">
@@ -52,7 +52,7 @@
       </a-col>
       <!-- #endregion -->
     </a-row>
-  </a-col>
+  </div>
 </template>
 
 <script setup lang="ts">
