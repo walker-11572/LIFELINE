@@ -1,7 +1,7 @@
 <template>
   <a-card class="mt-4 ms-4" :bordered="false">
     <span style="color: var(--color-neutral-10); font-size: 17px">目录</span>
-    <a-divider />
+    <a-divider :margin="12"/>
     <a-anchor :boundary="80" scroll-container="Window" style="width: 95%">
       <!-- h1 -->
       <a-anchor-link v-for="h1 in content" :key="h1.id" :href="'#' + h1.id"
