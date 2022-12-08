@@ -221,8 +221,8 @@
   </a-row>
   <!-- 帖子 -->
   <PostCard
-    Topic="Halloween Costume Contest 2018"
-    Category="politics"
+    :Title="store.topic.title"
+    :Category="store.topic.category"
     :ExtraInfos="ExtraInfos"
   />
   <!-- #endregion -->
