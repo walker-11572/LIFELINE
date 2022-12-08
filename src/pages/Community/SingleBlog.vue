@@ -11,10 +11,10 @@
         <!-- #endregion -->
         <!-- #region 标签 -->
         <a-row class="mt-1">
-          <a-col :span="19" class=" d-flex">
-              <CategoryTag :Category="store.topic.category" />
-              <CategoryTag :Category="store.topic.tags[0]" />
-              <CategoryTag :Category="store.topic.tags[1]" />
+          <a-col :span="19" class="d-flex">
+            <CategoryTag :Category="store.topic.category" />
+            <CategoryTag :Category="store.topic.tags[0]" />
+            <CategoryTag :Category="store.topic.tags[1]" />
           </a-col>
           <a-col
             :span="5"
@@ -131,8 +131,9 @@
       <!-- #endregion -->
     </a-col>
     <!-- #region 侧边栏 -->
-    <a-col :span="6"
-      ><a-card class="ms-4" :bordered="false">
+    <a-col :span="6">
+      <!-- 作者 -->
+      <a-card class="ms-4" :bordered="false">
         <!-- #region 用户信息 -->
         <a-collapse
           :bordered="false"
@@ -195,7 +196,7 @@
     justify="space-between"
     id="height5"
   >
-    <a-col :span="4">Suggested Topics</a-col>
+    <a-col :span="4" class=" fw-bold fs-5">相关推荐</a-col>
     <a-col :span="4"
       ><a-input-search
         placeholder="Search topics"
@@ -204,7 +205,7 @@
     /></a-col>
   </a-row>
   <a-row justify="center">
-    <a-col :span="24" class="px-3"><a-divider /></a-col>
+    <a-col :span="24"><a-divider :margin="16"/></a-col>
   </a-row>
   <!-- 帖子列表头 -->
   <a-row
