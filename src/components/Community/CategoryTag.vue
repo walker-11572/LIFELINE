@@ -1,6 +1,6 @@
 <template>
-  <router-link :to="'/community/categorySingle'" style="text-decoration: none">
-    <a-tag class="a-tag" :style="style" :size="props.size">
+  <router-link :to="'/community/categorySingle'" class="a-tag me-2">
+    <a-tag :style="style" :size="props.size">
       {{ props.Category }}
     </a-tag>
   </router-link>
@@ -27,7 +27,7 @@ switch (props.Category) {
         (style.color = "var(--color-neutral-8)");
     }
     break;
-  case "politics":
+  case "IT":
     {
       (style.backgroundColor = "rgb(var(--arcoblue-6))"),
         (style.color = "#fff");
@@ -35,4 +35,8 @@ switch (props.Category) {
     break;
 }
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.a-tag {
+  text-decoration: none;
+}
+</style>
