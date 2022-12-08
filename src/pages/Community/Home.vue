@@ -1,16 +1,32 @@
 <template>
-  <!-- 帖子列表头 -->
-  <a-row
-    style="height: 60px; color: var(--color-neutral-8); font-size: 14px"
-    align="center"
-    class="px-5"
-  >
-    <a-col :span="12">Topic</a-col>
-    <a-col :span="4">Category</a-col>
-    <a-col :span="2">Likes</a-col>
-    <a-col :span="2">Replies</a-col>
-    <a-col :span="2">Views</a-col>
-    <a-col :span="2">Activity</a-col>
+  <a-row class="mt-4">
+    <!-- 轮播图 -->
+    <a-col :span="10">
+      <a-carousel
+        :style="{
+          width: '100%',
+          height: '240px',
+        }"
+        :auto-play="true"
+      >
+        <a-carousel-item v-for="image in images">
+          <img
+            :src="image"
+            :style="{
+              width: '100%',
+            }"
+          />
+        </a-carousel-item>
+      </a-carousel>
+    </a-col>
+    <!--  -->
+    <a-col :span="6" :offset="1">
+      <a-card :bordered="false"></a-card>
+    </a-col>
+    <!--  -->
+    <a-col :span="6" :offset="1">
+      <a-card :bordered="false"></a-card>
+    </a-col>
   </a-row>
   <!-- 更新提示 -->
   <a-row>
@@ -32,6 +48,7 @@ import PostCard from "@/components/Community/PostCard.vue";
 import { reactive } from "vue";
 import { mainStore } from "@/store/index";
 const store = mainStore();
+const images = ["/1.jpg", "/2.png", "/3.jpg", "/4.jpg", "/5.jpg"];
 const ExtraInfos = reactive({
   Likes: store.topic.likes,
   Replies: store.topic.replies,
