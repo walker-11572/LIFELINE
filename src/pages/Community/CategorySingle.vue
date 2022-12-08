@@ -1,7 +1,7 @@
 <template>
   <a-row style="height: 100px" align="center" class="px-5">
     <a-col :span="2">
-      <CategoryTag Category="politics" size="large" />
+      <CategoryTag Category="IT" size="large" />
     </a-col>
     <a-col :span="3" :offset="12">Threads - {{ Threads }}</a-col>
     <a-col :span="1">
@@ -57,8 +57,8 @@
     <a-col :span="2">Activity</a-col>
   </a-row>
   <PostCard
-    Topic="Halloween Costume Contest 2018"
-    Category="politics"
+    :Title="store.topic.title"
+    :Category="store.topic.category"
     :ExtraInfos="ExtraInfos"
   />
 </template>
@@ -66,6 +66,8 @@
 import CategoryTag from "@/components/Community/CategoryTag.vue";
 import PostCard from "@/components/Community/PostCard.vue";
 import { ref, reactive } from "vue";
+import { mainStore } from "@/store/index";
+const store = mainStore();
 const Threads = ref(1234);
 const ExtraInfos = reactive({
   Likes: 985,

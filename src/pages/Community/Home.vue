@@ -22,8 +22,8 @@
   </a-row>
   <!-- 帖子 -->
   <PostCard
-    :Topic="store.topic.title"
-    Category="politics"
+    :Title="store.topic.title"
+    :Category="store.topic.category"
     :ExtraInfos="ExtraInfos"
   />
 </template>
@@ -33,9 +33,9 @@ import { reactive } from "vue";
 import { mainStore } from "@/store/index";
 const store = mainStore();
 const ExtraInfos = reactive({
-  Likes: 120,
-  Replies: 15,
-  Views: 985,
+  Likes: store.topic.likes,
+  Replies: store.topic.replies,
+  Views: store.topic.views,
   Activity: "1h",
 });
 </script>

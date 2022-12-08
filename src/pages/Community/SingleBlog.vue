@@ -11,12 +11,10 @@
         <!-- #endregion -->
         <!-- #region 标签 -->
         <a-row class="mt-1">
-          <a-col :span="19">
-            <a-space>
-              <CategoryTag :Category="topic.category" />
-              <CategoryTag :Category="topic.tags[0]" />
-              <CategoryTag :Category="topic.tags[1]" />
-            </a-space>
+          <a-col :span="19" class=" d-flex">
+              <CategoryTag :Category="store.topic.category" />
+              <CategoryTag :Category="store.topic.tags[0]" />
+              <CategoryTag :Category="store.topic.tags[1]" />
           </a-col>
           <a-col
             :span="5"
@@ -47,12 +45,12 @@
             <!-- 点赞 -->
             <button class="a-btn me-4">
               <icon-thumb-up size="20" class="me-1" />
-              <span>{{ 111 }}</span>
+              <span>{{ store.topic.likes }}</span>
             </button>
             <!-- 收藏 -->
             <button class="a-btn me-4">
               <icon-star size="20" class="me-1" />
-              <span>{{ 111 }}</span>
+              <span>{{ store.topic.stars }}</span>
             </button>
             <!-- 评论 -->
             <a href="#myReply" style="text-decoration: none">
@@ -62,7 +60,7 @@
                 @mouseleave="topic.replyCount = tempNum"
               >
                 <icon-message size="20" class="me-1" />
-                <span>{{ topic.replyCount }}</span>
+                <span>{{ store.topic.replies }}</span>
               </button>
             </a>
           </div>
@@ -243,7 +241,6 @@ const topic = reactive({
   time: "",
   user: "",
   category: "politics",
-  tags: ["world politics", "human rights"],
   body: store.topic.body,
   extraInfo: {},
   replyCount: "111",
@@ -256,7 +253,6 @@ const ExtraInfos = reactive({
   Activity: "1h",
 });
 const newReply = ref("");
-console.log(store.topic.body);
 // #region 获取&处理文章标题
 let a = store.topic.body.match(/<h[1-6]>([\s\S]*?)<\/h[1-6]>/g) || [];
 function handleBody() {

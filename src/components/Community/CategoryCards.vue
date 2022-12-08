@@ -1,7 +1,7 @@
 <template>
   <a-card :bordered="false" class="p-3">
     <a-row justify="space-between" align="center" class="mb-4">
-      <a-col :span="12"><CategoryTag Category="politics" /></a-col>
+      <a-col :span="12"><CategoryTag Category="IT" /></a-col>
       <a-col :span="12" class="text-end">Threads - {{ Threads }}</a-col>
     </a-row>
     <a-typography-paragraph style="font-size: 16px"

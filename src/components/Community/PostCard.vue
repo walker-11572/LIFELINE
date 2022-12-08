@@ -4,10 +4,12 @@
     <a-row class="mb-2" align="center" justify="space-between">
       <div class="d-flex align-items-center">
         <div class="user">dylan89</div>
-        <a-divider direction="vertical" />
+        <a-divider direction="vertical" :margin="8"/>
         <div class="time">17分钟前</div>
         <a-divider direction="vertical" />
-        <div><CategoryTag :Category="props.Category" v-if="!showTag"/></div>
+        <CategoryTag :Category="props.Category" size="small" v-if="!showTag" />
+        <CategoryTag :Category="store.topic.tags[0]" size="small" v-if="!showTag"/>
+        <CategoryTag :Category="store.topic.tags[1]" size="small" v-if="!showTag"/>
       </div>
       <div class="d-flex align-items-center">
         <a-tag :bordered="true">博文</a-tag>
@@ -16,16 +18,18 @@
     <!-- #endregion -->
     <a-row align="end">
       <a-col :span="18">
+        <!--#region 标题、正文片段 -->
         <router-link to="/community/singleBlog" class="router-link">
-          {{ props.Topic }}
+          {{ props.Title }}
         </router-link>
         <a-typography-paragraph ellipsis class="text">
           {{ getText() }}
         </a-typography-paragraph>
+        <!-- #endregion -->
         <!--#region views、likes、replies -->
         <a-row align="center">
-          <div class="info"
-            ><icon-eye class="me-1" :size="18" :strokeWidth="2" />
+          <div class="info">
+            <icon-eye class="me-1" :size="18" :strokeWidth="2" />
             <span>{{ props.ExtraInfos.Views }}</span>
           </div>
           <div class="info">
@@ -36,15 +40,17 @@
             <icon-message class="me-1" :size="16" :strokeWidth="2" />
             <span>{{ props.ExtraInfos.Replies }}</span>
           </div>
-          <div class="info"
-            ><span>{{ props.ExtraInfos.Activity }}</span>
+          <div class="info">
+            <span>{{ props.ExtraInfos.Activity }}</span>
           </div>
         </a-row>
         <!-- #endregion -->
       </a-col>
+      <!--#region 文章封面图 -->
       <a-col :span="5" :offset="1">
         <img src="/2.png" class="img" />
       </a-col>
+      <!-- #endregion -->
     </a-row>
   </a-col>
 </template>
@@ -57,7 +63,7 @@ const route = useRoute();
 var showTag = route.path.includes("categorySingle");
 const store = mainStore();
 const props = defineProps({
-  Topic: String,
+  Title: String,
   Category: String,
   ExtraInfos: Object,
 });
