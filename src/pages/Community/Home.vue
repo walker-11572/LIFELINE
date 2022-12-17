@@ -1,6 +1,6 @@
 <template>
   <a-row class="mt-4">
-    <!-- 轮播图 -->
+    <!-- 轮播图（画册、视频、广告） -->
     <a-col :span="10">
       <a-carousel
         :style="{
@@ -19,11 +19,11 @@
         </a-carousel-item>
       </a-carousel>
     </a-col>
-    <!--  -->
+    <!-- 问答列表 -->
     <a-col :span="6" :offset="1">
       <a-card :bordered="false"></a-card>
     </a-col>
-    <!--  -->
+    <!-- 投票列表 -->
     <a-col :span="6" :offset="1">
       <a-card :bordered="false"></a-card>
     </a-col>
