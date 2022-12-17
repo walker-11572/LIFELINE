@@ -4,7 +4,7 @@ export default createRouter({
   routes: [
     {
       path: "/",
-      redirect: '/community',
+      redirect: '/community/home',
       name: "Lines/community",
       // component: () => import("@/pages/Community/Community.vue"),
     },

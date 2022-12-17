@@ -4,19 +4,27 @@
     <a-row class="mb-2" align="center" justify="space-between">
       <div class="d-flex align-items-center">
         <div class="user">dylan89</div>
-        <a-divider direction="vertical" :margin="8"/>
+        <a-divider direction="vertical" :margin="8" />
         <div class="time">17分钟前</div>
         <a-divider direction="vertical" />
         <CategoryTag :Category="props.Category" size="small" v-if="!showTag" />
-        <CategoryTag :Category="store.topic.tags[0]" size="small" v-if="!showTag"/>
-        <CategoryTag :Category="store.topic.tags[1]" size="small" v-if="!showTag"/>
+        <CategoryTag
+          :Category="store.topic.tags[0]"
+          size="small"
+          v-if="!showTag"
+        />
+        <CategoryTag
+          :Category="store.topic.tags[1]"
+          size="small"
+          v-if="!showTag"
+        />
       </div>
       <div class="d-flex align-items-center">
         <a-tag :bordered="true">博文</a-tag>
       </div>
     </a-row>
     <!-- #endregion -->
-    <a-row align="end">
+    <a-row class="body">
       <a-col :span="18">
         <!--#region 标题、正文片段 -->
         <router-link to="/community/singleBlog" class="router-link">
@@ -27,7 +35,7 @@
         </a-typography-paragraph>
         <!-- #endregion -->
         <!--#region views、likes、replies -->
-        <a-row align="center">
+        <a-row align="center" style="margin-top: 12px;">
           <div class="info">
             <icon-eye class="me-1" :size="18" :strokeWidth="2" />
             <span>{{ props.ExtraInfos.Views }}</span>
@@ -81,7 +89,10 @@ function getText() {
   // height: 100px;
   background-color: var(--color-bg-2);
   color: var(--color-neutral-10);
-  padding-bottom: 18px;
+  .body {
+    border-bottom: 1px solid var(--color-neutral-3);
+    padding-bottom: 16px;
+  }
 }
 .router-link {
   text-decoration: none;
