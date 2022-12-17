@@ -20,12 +20,20 @@
       </a-carousel>
     </a-col>
     <!-- 问答列表 -->
-    <a-col :span="6" :offset="1">
-      <a-card :bordered="false"></a-card>
+    <a-col :span="8" class="ps-4">
+      <a-card :bordered="false" style="height: 240px">
+        <span style="font-size: 17px">问答</span>
+        <a-divider :margin="10" />
+        <a-empty />
+      </a-card>
     </a-col>
     <!-- 投票列表 -->
-    <a-col :span="6" :offset="1">
-      <a-card :bordered="false"></a-card>
+    <a-col :span="6" class="ps-4">
+      <a-card :bordered="false" style="height: 240px">
+        <span style="font-size: 17px">投票</span>
+        <a-divider :margin="10" />
+        <a-empty />
+      </a-card>
     </a-col>
   </a-row>
   <!-- 更新提示 -->
@@ -47,6 +55,16 @@
             :Category="store.topic.category"
             :ExtraInfos="ExtraInfos"
           />
+          <PostCard
+            :Title="store.topic.title"
+            :Category="store.topic.category"
+            :ExtraInfos="ExtraInfos"
+          />
+          <PostCard
+            :Title="store.topic.title"
+            :Category="store.topic.category"
+            :ExtraInfos="ExtraInfos"
+          />
         </a-tab-pane>
         <a-tab-pane key="2" title="最新"> Content of Tab Panel 2 </a-tab-pane>
         <a-tab-pane key="3" title="热门"> Content of Tab Panel 3 </a-tab-pane>
@@ -54,7 +72,11 @@
     </a-col>
     <!-- 侧边栏 -->
     <a-col :span="6">
-      <a-card class="ms-4 mt-4" :bordered="false"></a-card>
+      <a-card class="ms-4 mt-4" :bordered="false"> <a-empty /> </a-card>
+      <a-card class="ms-4 mt-4" :bordered="false"> <a-empty /> </a-card>
+      <a-card class="ms-4 mt-4" :bordered="false">
+        <a-empty />
+      </a-card>
     </a-col>
   </a-row>
 </template>
