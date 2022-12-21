@@ -17,7 +17,6 @@
     </a-col>
     <!-- 首页 -->
     <a-col
-      :offset="0"
       :span="1"
       class="nav-text"
       @click="ChangeTab('index')"
@@ -44,11 +43,11 @@
       分类
     </a-col>
     <!-- 搜索 -->
-    <a-col class="ms-4" :lg="{ span: 7 }" :xxl="{ span: 5 }">
+    <a-col class="ms-4" :lg="{ span: 8 }" :xxl="{ span: 5 }">
       <a-input-search placeholder="Search" />
     </a-col>
     <!-- 功能按钮 -->
-    <a-col :span="3" class="d-flex justify-content-end">
+    <a-col flex="160px" class="d-flex justify-content-end">
       <!-- 小程序二维码 -->
       <a-popover position="bottom">
         <a-button type="text" class="nav-btn">
@@ -149,12 +148,13 @@
       </a-dropdown>
     </a-col>
     <!-- 发布话题 -->
-    <a-col :span="1" :offset="2" class="d-flex justify-content-end">
+    <a-col flex="auto" class="d-flex justify-content-end">
       <a-dropdown trigger="hover">
         <a-button
           type="primary"
           shape="circle"
           size="large"
+          class="me-3"
           @click="CreateTopic()"
         >
           <template #icon>
