@@ -303,7 +303,7 @@ onBeforeUnmount(() => {
   border-bottom: 1px solid var(--color-neutral-3);
   position: fixed;
   top: 0;
-  z-index: 10;
+  z-index: 100;
   background-color: var(--color-bg-1);
   transition: top 0.5s;
 }
