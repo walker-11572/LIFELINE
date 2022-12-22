@@ -1,6 +1,6 @@
 <template>
   <TagsNav />
-  <div class="position-relative" style="top: 135px">
+  <div class="position-relative" style="top: 125px">
     <a-row>
       <!-- 轮播图（画册、视频、广告） -->
       <a-col :span="10">

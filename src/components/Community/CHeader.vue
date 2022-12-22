@@ -305,7 +305,7 @@ onBeforeUnmount(() => {
   top: 0;
   z-index: 100;
   background-color: var(--color-bg-1);
-  transition: top 0.5s;
+  transition: all 0.2s;
 }
 
 .nav-btn {
