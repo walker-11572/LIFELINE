@@ -1,29 +1,28 @@
 <template>
-  <a-row justify="space-between" style="margin-top: 85px;" id="height">
+  <a-row justify="space-between" style="margin-top: 85px" id="height">
     <a-col :span="18"
       ><a-card class="p-3" :bordered="false">
         <!-- #region 标题 -->
-        <a-row class="mt-1">
-          <a-col>
-            <h2 class="fw-bold">{{ store.topic.title }}</h2>
-          </a-col>
+        <a-row class="mt-1 fw-bold h2 mb-3">
+          {{ store.topic.title }}
         </a-row>
         <!-- #endregion -->
         <!-- #region 标签 -->
-        <a-row class="mt-1">
-          <a-col :span="19" class="d-flex">
+        <a-row class="mt-1" align="center">
+          <a-col :span="16" class="d-flex">
             <CategoryTag :Category="store.topic.category" />
             <CategoryTag :Category="store.topic.tags[0]" />
             <CategoryTag :Category="store.topic.tags[1]" />
           </a-col>
+          <!-- 附加信息 -->
           <a-col
-            :span="5"
-            class="d-flex align-center justify-content-end"
+            :span="8"
+            class="d-flex justify-content-end"
             style="color: var(--color-neutral-6); font-size: 13px"
           >
             <!-- <icon-schedule size="18" class="me-2" /> -->
             <span>2022年11月11日</span>
-            <span class="ms-3">#1</span>
+            <span class="ms-3">阅读 {{store.topic.read}}</span>
           </a-col>
         </a-row>
         <!-- #endregion -->
@@ -43,13 +42,33 @@
         <a-row class="mt-4" align="center" justify="space-between">
           <div class="d-flex">
             <!-- 点赞 -->
-            <button class="a-btn me-4">
-              <icon-thumb-up size="20" class="me-1" />
+            <button
+              class="a-btn me-4"
+              @click="store.topic.liked = !store.topic.liked"
+            >
+              <span v-if="store.topic.liked"
+                ><icon-thumb-up-fill
+                  size="20"
+                  class="me-1"
+                  style="color: rgb(var(--arcoblue-6))"
+                />
+              </span>
+              <span v-else><icon-thumb-up size="20" class="me-1" /></span>
               <span>{{ store.topic.likes }}</span>
             </button>
             <!-- 收藏 -->
-            <button class="a-btn me-4">
-              <icon-star size="20" class="me-1" />
+            <button
+              class="a-btn me-4"
+              @click="store.topic.starred = !store.topic.starred"
+            >
+              <span v-if="store.topic.starred"
+                ><icon-star-fill
+                  size="20"
+                  class="me-1"
+                  style="color: rgb(var(--yellow-6))"
+                />
+              </span>
+              <span v-else><icon-star size="20" class="me-1" /></span>
               <span>{{ store.topic.stars }}</span>
             </button>
             <!-- 评论 -->
@@ -95,7 +114,7 @@
         <a-col>
           <a-card :bordered="false" class="m-0 p-0">
             <div class="d-flex justify-content-between align-items-center mt-3">
-              <h5 class="fw-bold ms-3">评论</h5>
+              <h5 class="fw-bold ms-3">评论 {{store.topic.replies}}</h5>
               <a-radio-group type="button" class="me-3" default-value="recent">
                 <a-radio value="recent">最新</a-radio>
                 <a-radio value="Hottest">最热</a-radio>
@@ -135,52 +154,20 @@
       <!-- 作者 -->
       <a-card class="ms-4" :bordered="false">
         <!-- #region 用户信息 -->
-        <a-collapse
-          :bordered="false"
-          expand-icon-position="right"
-          :show-expand-icon="false"
-        >
-          <a-collapse-item key="1">
-            <template #header>
-              <div class="d-flex align-items-center">
-                <a-avatar>A</a-avatar>
-                <div class="ms-3">
-                  <div style="font-size: 18px">dylan89</div>
-                  <span>Hello world!</span>
-                </div>
-              </div>
-            </template>
-            <div class="d-flex justify-content-around abc">
-              <a-button type="primary" long class="me-2">关注</a-button>
-              <a-button type="outline" long class="ms-2">私信</a-button>
-            </div>
-          </a-collapse-item>
-        </a-collapse>
+        <div class="d-flex align-items-center mb-3">
+          <a-avatar :size="48">D</a-avatar>
+          <div class="ms-3">
+            <div style="font-size: 18px">dylan89</div>
+            <span>Hello world!</span>
+          </div>
+        </div>
+        <div class="d-flex justify-content-around abc">
+          <a-button long class="me-2" size="large" v-if="store.topic.subscribed">已关注</a-button>
+          <!-- TODO 穿插加载中按钮 -->
+          <a-button type="primary" long class="me-2" size="large" v-else>关注</a-button>
+          <a-button type="outline" long class="ms-2" size="large">私信</a-button>
+        </div>
         <!-- #endregion -->
-      </a-card>
-      <!-- Thread Status -->
-      <a-card class="mt-4 ms-4" :bordered="false">
-        <h6 class="text-center">Thread Status</h6>
-        <a-row class="mt-3" justify="center">
-          <a-tooltip content="浏览数" mini>
-            <div class="status">
-              <icon-eye size="24" />
-              <span>10.1k</span>
-            </div>
-          </a-tooltip>
-          <a-tooltip content="参与人数" mini>
-            <div class="status">
-              <icon-user-group size="24" />
-              <span>10.1k</span>
-            </div>
-          </a-tooltip>
-          <a-tooltip content="总点赞数" mini>
-            <div class="status">
-              <icon-thumb-up-fill size="24" />
-              <span>10.1k</span>
-            </div>
-          </a-tooltip>
-        </a-row>
       </a-card>
       <!-- 目录 -->
       <a-affix :offsetTop="45" v-show="contentsVisibility">
@@ -196,7 +183,7 @@
     justify="space-between"
     id="height5"
   >
-    <a-col :span="4" class=" fw-bold fs-5">相关推荐</a-col>
+    <a-col :span="4" class="fw-bold fs-5">相关推荐</a-col>
     <a-col :span="4"
       ><a-input-search
         placeholder="Search topics"
@@ -205,7 +192,7 @@
     /></a-col>
   </a-row>
   <a-row justify="center">
-    <a-col :span="24"><a-divider :margin="16"/></a-col>
+    <a-col :span="24"><a-divider :margin="16" /></a-col>
   </a-row>
   <!-- 帖子列表头 -->
   <a-row
@@ -290,6 +277,28 @@ onBeforeUnmount(() => {
   window.removeEventListener("scroll", ContentsVisibility, true);
 });
 //#endregion
+onMounted(() => {
+  let h1 = document.querySelectorAll("h1");
+  let h2 = document.querySelectorAll("h2");
+  let h3 = document.querySelectorAll("h3");
+  let h4 = document.querySelectorAll("h4");
+  h1.forEach((currentValue) => {
+    currentValue.style.fontSize = "24px";
+    currentValue.style.fontWeight = "bold";
+  });
+  h2.forEach((currentValue) => {
+    currentValue.style.fontSize = "20px";
+    currentValue.style.fontWeight = "bold";
+  });
+  h3.forEach((currentValue) => {
+    currentValue.style.fontSize = "18px";
+    currentValue.style.fontWeight = "bold";
+  });
+  h4.forEach((currentValue) => {
+    currentValue.style.fontSize = "16px";
+    currentValue.style.fontWeight = "bold";
+  });
+});
 </script>
 
 <style lang="scss" scoped>

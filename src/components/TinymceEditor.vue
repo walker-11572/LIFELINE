@@ -41,7 +41,7 @@ switch (props.type) {
     uuid = "blogReply";
     skin = "naked";
     height = 180;
-    menubar = true;
+    menubar = false;
     toolbar =
       "bold italic underline strikethrough | numlist bullist | image link codesample emoticons";
     break;

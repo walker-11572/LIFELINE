@@ -89,6 +89,7 @@ function getText() {
   // height: 100px;
   background-color: var(--color-bg-2);
   color: var(--color-neutral-10);
+  position: relative;
   .body {
     border-bottom: 1px solid var(--color-neutral-3);
     padding-bottom: 16px;
