@@ -125,7 +125,7 @@
       </a-row>
       <a-row id="height3">
         <a-col>
-          <Replies />
+          <Comments />
         </a-col>
       </a-row>
       <!-- #endregion -->
@@ -194,19 +194,6 @@
   <a-row justify="center">
     <a-col :span="24"><a-divider :margin="16" /></a-col>
   </a-row>
-  <!-- 帖子列表头 -->
-  <a-row
-    style="color: var(--color-neutral-8); font-size: 14px"
-    align="center"
-    class="px-5 mb-4"
-  >
-    <a-col :span="12">Topic</a-col>
-    <a-col :span="4">Category</a-col>
-    <a-col :span="2">Likes</a-col>
-    <a-col :span="2">Replies</a-col>
-    <a-col :span="2">Views</a-col>
-    <a-col :span="2">Activity</a-col>
-  </a-row>
   <!-- 帖子 -->
   <PostCard
     :Title="store.topic.title"
@@ -218,7 +205,7 @@
 </template>
 <script setup lang="ts">
 import CategoryTag from "@/components/community/CategoryTag.vue";
-import Replies from "@/components/community/Replies.vue";
+import Comments from "@/components/Community/Comments.vue";
 import Editor from "@/components/TinymceEditor.vue";
 import PostCard from "@/components/Community/PostCard.vue";
 import Contents from "@/components/Community/Mulu.vue";

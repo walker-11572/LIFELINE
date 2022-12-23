@@ -1,6 +1,6 @@
 <template>
   <a-card
-    class="p-3 hover"
+    class="p-3"
     :bordered="false"
     @mouseenter="visibility = 'visible'"
     @mouseleave="visibility = 'hidden'"
@@ -8,7 +8,7 @@
     <!-- #region 用户信息 -->
     <a-row align="center">
       <a-col :span="1"><a-avatar>A</a-avatar></a-col>
-      <a-col :offset="1" :span="2">dylan89</a-col>
+      <a-col :offset="1" :span="2" class=" fs-6">dylan89</a-col>
       <a-col
         :offset="12"
         :span="8"
@@ -16,13 +16,13 @@
         style="color: var(--color-neutral-6); font-size: 13px"
       >
         <!-- <icon-schedule size="18" class="me-2" /> -->
-        <span>2022年11月11日</span>
+        <span>1小时前</span>
         <span class="ms-3">#2</span>
       </a-col>
     </a-row>
     <!-- #endregion -->
     <!-- #region 正文 -->
-    <a-row justify="center">
+    <a-row class="mt-1">
       <a-col :offset="2" :span="22">
         <p>
           Finally!<br />Are there any special recommendations for design or an
@@ -41,7 +41,14 @@
     <a-row class="mt-3 ms-5 d-flex justify-content-between">
       <div class="d-flex">
         <button class="a-btn ms-3">
-          <icon-thumb-up size="20" class="me-1" />
+          <span v-if="liked"
+            ><icon-thumb-up-fill
+              size="20"
+              class="me-1"
+              style="color: rgb(var(--arcoblue-6))"
+            />
+          </span>
+          <span v-else><icon-thumb-up size="20" class="me-1" /></span>
           <span>{{ 111 }}</span>
         </button>
         <button class="a-btn ms-3" @click="Reply">
@@ -79,16 +86,23 @@
         ></a-col
       >
     </a-row>
+    <a-row class="mt-3">
+      <a-col :offset="2" :span="22">
+        <CommentReplies />
+      </a-col>
+    </a-row>
   </a-card>
 </template>
 <script lang="ts" setup>
 import Editor from "@/components/TinymceEditor.vue";
+import CommentReplies from "@/components/Community/CommentReplies.vue";
 import { reactive, ref, onMounted } from "vue";
 import prism from "prismjs";
 import hljs from "highlight.js";
 let visibility = ref("hidden");
 var newReply = ref("");
 var replyCount = ref("111");
+var liked = ref(true);
 const tempNum = replyCount.value;
 var showReply = ref(false);
 if (replyCount.value === "0") {

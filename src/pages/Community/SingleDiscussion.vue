@@ -213,7 +213,7 @@
     </a-row>
     <!-- #endregion -->
   </a-card>
-  <Replies />
+  <Comments />
   <a-row
     style="height: 60px; color: var(--color-neutral-8); font-size: 18px"
     align="end"
@@ -270,7 +270,7 @@
 </template>
 <script setup lang="ts">
 import CategoryTag from "@/components/community/CategoryTag.vue";
-import Replies from "@/components/community/Replies.vue";
+import Comments from "@/components/Community/Comments.vue";
 import Editor from "@/components/TinymceEditor.vue";
 import PostCard from "@/components/Community/PostCard.vue";
 import { reactive, ref } from "vue";
