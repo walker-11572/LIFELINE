@@ -61,6 +61,7 @@
     :Category="store.topic.category"
     :ExtraInfos="ExtraInfos"
   />
+  <a-back-top />
 </template>
 <script setup lang="ts">
 import CategoryTag from "@/components/Community/CategoryTag.vue";

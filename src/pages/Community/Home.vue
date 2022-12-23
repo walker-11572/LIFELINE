@@ -82,6 +82,7 @@
       </a-col>
     </a-row>
   </div>
+  <a-back-top />
 </template>
 <script setup lang="ts">
 import PostCard from "@/components/Community/PostCard.vue";

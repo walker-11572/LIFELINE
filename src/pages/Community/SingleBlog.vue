@@ -214,6 +214,7 @@
     :ExtraInfos="ExtraInfos"
   />
   <!-- #endregion -->
+  <a-back-top />
 </template>
 <script setup lang="ts">
 import CategoryTag from "@/components/community/CategoryTag.vue";
