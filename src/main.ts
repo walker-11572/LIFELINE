@@ -9,7 +9,11 @@ import "highlight.js/styles/agate.css";
 import "@arco-design/web-vue/dist/arco.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "prismjs/themes/prism.css";
+import moment from "moment";
+import "moment/dist/locale/zh-cn";
+moment.locale("zh-cn");
 const app = createApp(App);
+app.config.globalProperties.$moment = moment
 app.use(ArcoVue);
 app.use(ArcoVueIcon);
 app.use(createPinia());

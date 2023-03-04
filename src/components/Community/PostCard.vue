@@ -5,19 +5,11 @@
       <div class="d-flex align-items-center">
         <div class="user">dylan89</div>
         <a-divider direction="vertical" :margin="8" />
-        <div class="time">17分钟前</div>
+        <div class="time">{{ formatDateTime(props.post.created_at) }}</div>
         <a-divider direction="vertical" />
         <CategoryTag :Category="category" size="small" v-if="!showTag" />
-        <CategoryTag
-          :Category="category"
-          size="small"
-          v-if="!showTag"
-        />
-        <CategoryTag
-          :Category="category"
-          size="small"
-          v-if="!showTag"
-        />
+        <CategoryTag v-for="tag in tags" :Category="tag" size="small" v-if="!showTag" />
+        
       </div>
       <div class="d-flex align-items-center">
         <a-tag :bordered="true">博文</a-tag>
@@ -49,7 +41,8 @@
             <span>{{ props.post.comment_count }}</span>
           </div>
           <div class="info">
-            <span>{{ props.post.updated_at }}</span>
+            <icon-history class="me-1" :size="16" :strokeWidth="2" />
+            <span>{{ formatDate(props.post.updated_at) }}</span>
           </div>
         </a-row>
         <!-- #endregion -->
@@ -65,9 +58,10 @@
 
 <script setup lang="ts">
 import CategoryTag from "@/components/community/CategoryTag.vue";
-import { ref, reactive, nextTick } from "vue";
+import { ref, reactive } from "vue";
 import { mainStore } from "@/store/index";
 import axios from "axios";
+import moment from "moment";
 import { useRoute } from "vue-router";
 const route = useRoute();
 var showTag = route.path.includes("categorySingle");
@@ -76,11 +70,23 @@ const props = defineProps({
   post: Object,
 });
 let category = ref();
+let tags = ref();
 axios
   .get(`http://127.0.0.1:7001/api/getCategory/${props.post.id}`)
   .then((res) => {
     category.value = res.data;
   });
+  axios
+  .get(`http://127.0.0.1:7001/api/getTag/${props.post.id}`)
+  .then((res) => {
+    tags.value = res.data;
+  });
+function formatDate(datetime: any) {
+  return moment(datetime).fromNow();
+}
+function formatDateTime(datetime: moment.MomentInput) {
+  return moment(datetime).format('YYYY-MM-DD')
+}
 //TODO 将预览文段改为由后端返回
 //#region
 let text = props.post.content;
