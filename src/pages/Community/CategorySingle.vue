@@ -43,19 +43,6 @@
   <a-row justify="center">
     <a-col :span="23" class="px-4"><a-divider /></a-col>
   </a-row>
-  <!-- 帖子列表头 -->
-  <a-row
-    style="height: 40px; color: var(--color-neutral-8); font-size: 14px"
-    align="start"
-    class="px-5"
-  >
-    <a-col :span="12">Topic</a-col>
-    <a-col :span="4">Category</a-col>
-    <a-col :span="2">Likes</a-col>
-    <a-col :span="2">Replies</a-col>
-    <a-col :span="2">Views</a-col>
-    <a-col :span="2">Activity</a-col>
-  </a-row>
   <PostCard
     :Title="store.topic.title"
     :Category="store.topic.category"

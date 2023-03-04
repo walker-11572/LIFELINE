@@ -28,7 +28,7 @@
       <a-col :span="18">
         <!--#region 标题、正文片段 -->
         <router-link to="/community/singleBlog" class="router-link">
-          {{ props.Title }}
+          {{ props.post.title }}
         </router-link>
         <a-typography-paragraph ellipsis class="text">
           {{ getText() }}
@@ -38,18 +38,18 @@
         <a-row align="center" style="margin-top: 12px;">
           <div class="info">
             <icon-eye class="me-1" :size="18" :strokeWidth="2" />
-            <span>{{ props.ExtraInfos.Views }}</span>
+            <span>{{ props.post.view_count }}</span>
           </div>
           <div class="info">
             <icon-thumb-up class="me-1" :size="16" :strokeWidth="2" />
-            <span>{{ props.ExtraInfos.Likes }}</span>
+            <span>{{ props.post.liked_count }}</span>
           </div>
           <div class="info">
             <icon-message class="me-1" :size="16" :strokeWidth="2" />
-            <span>{{ props.ExtraInfos.Replies }}</span>
+            <span>{{ props.post.comment_count }}</span>
           </div>
           <div class="info">
-            <span>{{ props.ExtraInfos.Activity }}</span>
+            <span>{{ props.post.updated_at }}</span>
           </div>
         </a-row>
         <!-- #endregion -->
@@ -71,11 +71,9 @@ const route = useRoute();
 var showTag = route.path.includes("categorySingle");
 const store = mainStore();
 const props = defineProps({
-  Title: String,
-  Category: String,
-  ExtraInfos: Object,
+  post:Object
 });
-let text = store.topic.body;
+let text = props.post.content;
 function getText() {
   if (!text) {
     return;

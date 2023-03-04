@@ -328,7 +328,7 @@ onBeforeUnmount(() => {
 
 .nav-text:hover {
   color: rgb(var(--arcoblue-6));
-  border-bottom: 2px solid rgb(var(--arcoblue-6));
+  /* border-bottom: 2px solid rgb(var(--arcoblue-6)); */
 }
 
 .active {

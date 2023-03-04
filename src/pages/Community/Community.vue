@@ -1,7 +1,11 @@
 <template>
   <Particles />
   <CHeader />
-  <a-col :lg="{ span: 18 }" :xxl="{ span: 16 }" style="margin: 0 auto">
+  <a-col
+    :lg="{ span: 18 }"
+    :xxl="{ span: 16 }"
+    style="margin: 60px auto 0 auto"
+  >
     <router-view />
   </a-col>
 </template>

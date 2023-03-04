@@ -12,7 +12,7 @@
     "@highlightjs/vue-plugin": "^2.1.0",
     "@tinymce/tinymce-vue": "^4.0.7",
     "animate.css": "^4.1.1",
-    "axios": "^1.1.3",
+    "axios": "^1.2.1",
     "bootstrap": "^5.2.2",
     "country-calling-code": "^0.0.3",
     "flag-icons": "^6.6.6",
