@@ -7,14 +7,14 @@
         <a-divider direction="vertical" :margin="8" />
         <div class="time">17分钟前</div>
         <a-divider direction="vertical" />
-        <CategoryTag :Category="props.Category" size="small" v-if="!showTag" />
+        <CategoryTag :Category="category" size="small" v-if="!showTag" />
         <CategoryTag
-          :Category="store.topic.tags[0]"
+          :Category="category"
           size="small"
           v-if="!showTag"
         />
         <CategoryTag
-          :Category="store.topic.tags[1]"
+          :Category="category"
           size="small"
           v-if="!showTag"
         />
@@ -35,7 +35,7 @@
         </a-typography-paragraph>
         <!-- #endregion -->
         <!--#region views、likes、replies -->
-        <a-row align="center" style="margin-top: 12px;">
+        <a-row align="center" style="margin-top: 12px">
           <div class="info">
             <icon-eye class="me-1" :size="18" :strokeWidth="2" />
             <span>{{ props.post.view_count }}</span>
@@ -65,14 +65,24 @@
 
 <script setup lang="ts">
 import CategoryTag from "@/components/community/CategoryTag.vue";
+import { ref, reactive, nextTick } from "vue";
 import { mainStore } from "@/store/index";
+import axios from "axios";
 import { useRoute } from "vue-router";
 const route = useRoute();
 var showTag = route.path.includes("categorySingle");
 const store = mainStore();
 const props = defineProps({
-  post:Object
+  post: Object,
 });
+let category = ref();
+axios
+  .get(`http://127.0.0.1:7001/api/getCategory/${props.post.id}`)
+  .then((res) => {
+    category.value = res.data;
+  });
+//TODO 将预览文段改为由后端返回
+//#region
 let text = props.post.content;
 function getText() {
   if (!text) {
@@ -80,6 +90,7 @@ function getText() {
   }
   return text.replace(/<[^<>]+>/g, " ").slice(0, 200);
 }
+//#endregion
 </script>
 
 <style lang="scss" scoped>
