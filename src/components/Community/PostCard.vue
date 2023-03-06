@@ -8,8 +8,12 @@
         <div class="time">{{ formatDateTime(props.post.created_at) }}</div>
         <a-divider direction="vertical" />
         <CategoryTag :Category="category" size="small" v-if="!showTag" />
-        <CategoryTag v-for="tag in tags" :Category="tag" size="small" v-if="!showTag" />
-        
+        <CategoryTag
+          v-for="tag in tags"
+          :Category="tag"
+          size="small"
+          v-if="!showTag"
+        />
       </div>
       <div class="d-flex align-items-center">
         <a-tag :bordered="true">博文</a-tag>
@@ -19,7 +23,7 @@
     <a-row class="body">
       <a-col :span="18">
         <!--#region 标题、正文片段 -->
-        <router-link to="/community/singleBlog" class="router-link">
+        <router-link :to="{path:`/community/singleBlog/${props.post.id}`}" class="router-link">
           {{ props.post.title }}
         </router-link>
         <a-typography-paragraph ellipsis class="text">
@@ -76,16 +80,14 @@ axios
   .then((res) => {
     category.value = res.data;
   });
-  axios
-  .get(`http://127.0.0.1:7001/api/getTag/${props.post.id}`)
-  .then((res) => {
-    tags.value = res.data;
-  });
+axios.get(`http://127.0.0.1:7001/api/getTag/${props.post.id}`).then((res) => {
+  tags.value = res.data;
+});
 function formatDate(datetime: any) {
   return moment(datetime).fromNow();
 }
 function formatDateTime(datetime: moment.MomentInput) {
-  return moment(datetime).format('YYYY-MM-DD')
+  return moment(datetime).format("YYYY-MM-DD");
 }
 //TODO 将预览文段改为由后端返回
 //#region

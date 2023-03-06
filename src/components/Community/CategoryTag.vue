@@ -26,6 +26,7 @@ const props = defineProps({
     default: "medium",
   },
 });
+// 为不同的分类适配合适的颜色
 watch(()=>props.Category.name, () => {
   switch (props.Category.name) {
     default:

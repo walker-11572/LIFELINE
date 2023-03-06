@@ -34,7 +34,7 @@ export default createRouter({
           component: () => import("@/pages/Community/Home.vue"),
         },
         {
-          path:"singleBlog",
+          path:"singleBlog/:blog_id",
           name:"Community/SingleBlog",
           component: () => import("@/pages/Community/SingleBlog.vue"),
         },
