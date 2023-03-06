@@ -1,6 +1,8 @@
 <template>
   <!-- <Header></Header> -->
-  <router-view />
+  <suspense>
+    <router-view />
+  </suspense>
   <!-- <Footer></Footer> -->
 </template>
 
@@ -10,5 +12,4 @@ import Header from "./components/pages/Header.vue";
 import Footer from "./components/Footer.vue";
 </script>
 <style src="./assets/scss/rings.scss" lang="scss"></style>
-<style lang="scss">
-</style>
+<style lang="scss"></style>

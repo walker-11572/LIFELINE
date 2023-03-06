@@ -23,7 +23,7 @@
     <a-row class="body">
       <a-col :span="18">
         <!--#region 标题、正文片段 -->
-        <router-link :to="{path:`/community/singleBlog/${props.post.id}`}" class="router-link">
+        <router-link :to="{path:`/community/singleBlog/${props.post.id}`}" class="router-link" target="_blank">
           {{ props.post.title }}
         </router-link>
         <a-typography-paragraph ellipsis class="text">

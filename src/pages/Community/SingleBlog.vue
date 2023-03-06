@@ -4,15 +4,15 @@
       ><a-card class="p-3" :bordered="false">
         <!-- #region 标题 -->
         <a-row class="mt-1 fw-bold h2 mb-3">
-          {{ store.topic.title }}
+          {{ post.title }}
         </a-row>
         <!-- #endregion -->
         <!-- #region 标签 -->
         <a-row class="mt-1" align="center">
           <a-col :span="16" class="d-flex">
-            <CategoryTag :Category="store.topic.category" />
-            <CategoryTag :Category="store.topic.tags[0]" />
-            <CategoryTag :Category="store.topic.tags[1]" />
+            <!-- <CategoryTag :Category="store.topic.category" />
+              <CategoryTag :Category="store.topic.tags[0]" />
+              <CategoryTag :Category="store.topic.tags[1]" /> -->
           </a-col>
           <!-- 附加信息 -->
           <a-col
@@ -21,8 +21,8 @@
             style="color: var(--color-neutral-6); font-size: 13px"
           >
             <!-- <icon-schedule size="18" class="me-2" /> -->
-            <span>2022年11月11日</span>
-            <span class="ms-3">阅读 {{store.topic.read}}</span>
+            <span>{{ formatDateTime(post.created_at) }}</span>
+            <span class="ms-3">阅读 {{ post.view_count }}</span>
           </a-col>
         </a-row>
         <!-- #endregion -->
@@ -114,7 +114,7 @@
         <a-col>
           <a-card :bordered="false" class="m-0 p-0">
             <div class="d-flex justify-content-between align-items-center mt-3">
-              <h5 class="fw-bold ms-3">评论 {{store.topic.replies}}</h5>
+              <h5 class="fw-bold ms-3">评论 {{ store.topic.replies }}</h5>
               <a-radio-group type="button" class="me-3" default-value="recent">
                 <a-radio value="recent">最新</a-radio>
                 <a-radio value="Hottest">最热</a-radio>
@@ -162,10 +162,16 @@
           </div>
         </div>
         <div class="d-flex justify-content-around abc">
-          <a-button long class="me-2" size="large" v-if="store.topic.subscribed">已关注</a-button>
+          <a-button long class="me-2" size="large" v-if="store.topic.subscribed"
+            >已关注</a-button
+          >
           <!-- TODO 穿插加载中按钮 -->
-          <a-button type="primary" long class="me-2" size="large" v-else>关注</a-button>
-          <a-button type="outline" long class="ms-2" size="large">私信</a-button>
+          <a-button type="primary" long class="me-2" size="large" v-else
+            >关注</a-button
+          >
+          <a-button type="outline" long class="ms-2" size="large"
+            >私信</a-button
+          >
         </div>
         <!-- #endregion -->
       </a-card>
@@ -195,11 +201,11 @@
     <a-col :span="24"><a-divider :margin="16" /></a-col>
   </a-row>
   <!-- 帖子 -->
-  <PostCard
+  <!-- <PostCard
     :Title="store.topic.title"
     :Category="store.topic.category"
     :ExtraInfos="ExtraInfos"
-  />
+  /> -->
   <!-- #endregion -->
   <a-back-top />
 </template>
@@ -211,6 +217,9 @@ import PostCard from "@/components/Community/PostCard.vue";
 import Contents from "@/components/Community/Mulu.vue";
 import { reactive, ref, onMounted, onBeforeUnmount } from "vue";
 import prism from "prismjs";
+import axios from "axios";
+import moment from "moment";
+import { useRoute } from "vue-router";
 import { mainStore } from "@/store/index";
 const store = mainStore();
 const topic = reactive({
@@ -222,29 +231,37 @@ const topic = reactive({
   replyCount: "111",
 });
 const tempNum = topic.replyCount;
-const ExtraInfos = reactive({
-  Likes: 985,
-  Replies: 502,
-  Views: 15,
-  Activity: "1h",
-});
+const route = useRoute();
 const newReply = ref("");
-// #region 获取&处理文章标题
-let a = store.topic.body.match(/<h[1-6]>([\s\S]*?)<\/h[1-6]>/g) || [];
+// #region Axios从后端获取文章
+const getPost = async () => {
+  const response = await axios.get(
+    `http://127.0.0.1:7001/api/getPost/${route.params.blog_id}`
+  );
+  return response.data;
+};
+const post = await getPost();
+// #endregion
+// #region 获取并加工文章标题
+const a = post.content.match(/<h[1-6]>([\s\S]*?)<\/h[1-6]>/g) || [];
 function handleBody() {
   let handledBody = "";
   let b = new Array();
   a?.forEach((item, index, arr) => {
     b[index] =
       item.slice(0, 3) + " id=" + '"' + `h-${index + 1}` + '"' + item.slice(3);
-    handledBody = store.topic.body.replace(a[0], b[0]);
+    handledBody = post.content.replace(a[0], b[0]);
     for (let i = 0; i < a?.length; i++) {
       handledBody = handledBody.replace(a[i], b[i]);
     }
   });
   return handledBody;
 }
-
+// #endregion
+// #region 日期格式化
+function formatDateTime(datetime: moment.MomentInput) {
+  return moment(datetime).format("YYYY-MM-DD hh:mm:ss");
+}
 // #endregion
 // #region 目录出现&隐藏
 var contentsVisibility = ref(true);
@@ -265,6 +282,7 @@ onBeforeUnmount(() => {
   window.removeEventListener("scroll", ContentsVisibility, true);
 });
 //#endregion
+// #region 标题字号调整
 onMounted(() => {
   let h1 = document.querySelectorAll("h1");
   let h2 = document.querySelectorAll("h2");
@@ -287,6 +305,7 @@ onMounted(() => {
     currentValue.style.fontWeight = "bold";
   });
 });
+// #endregion
 </script>
 
 <style lang="scss" scoped>
