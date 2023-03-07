@@ -10,9 +10,8 @@
         <!-- #region 标签 -->
         <a-row class="mt-1" align="center">
           <a-col :span="16" class="d-flex">
-            <!-- <CategoryTag :Category="store.topic.category" />
-              <CategoryTag :Category="store.topic.tags[0]" />
-              <CategoryTag :Category="store.topic.tags[1]" /> -->
+            <CategoryTag :Category="Category" />
+            <CategoryTag v-for="tag in Tags" :Category="tag" />
           </a-col>
           <!-- 附加信息 -->
           <a-col
@@ -241,6 +240,22 @@ const getPost = async () => {
   return response.data;
 };
 const post = await getPost();
+// #endregion
+//#region Axios从后端获取标签和分类
+const getCategory = async () => {
+  const response = await axios.get(
+    `http://127.0.0.1:7001/api/getCategory/${post.id}`
+  );
+  return response.data;
+};
+const getTags = async () => {
+  const response = await axios.get(
+    `http://127.0.0.1:7001/api/getTag/${post.id}`
+  );
+  return response.data;
+};
+const Category = await getCategory();
+const Tags = await getTags();
 // #endregion
 // #region 获取并加工文章标题
 const a = post.content.match(/<h[1-6]>([\s\S]*?)<\/h[1-6]>/g) || [];
