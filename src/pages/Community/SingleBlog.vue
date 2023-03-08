@@ -234,24 +234,18 @@ const route = useRoute();
 const newReply = ref("");
 // #region Axios从后端获取文章
 const getPost = async () => {
-  const response = await axios.get(
-    `http://127.0.0.1:7001/api/getPost/${route.params.blog_id}`
-  );
+  const response = await axios.get(`/api/getPost/${route.params.blog_id}`);
   return response.data;
 };
 const post = await getPost();
 // #endregion
 //#region Axios从后端获取标签和分类
 const getCategory = async () => {
-  const response = await axios.get(
-    `http://127.0.0.1:7001/api/getCategory/${post.id}`
-  );
+  const response = await axios.get(`/api/getCategory/${post.id}`);
   return response.data;
 };
 const getTags = async () => {
-  const response = await axios.get(
-    `http://127.0.0.1:7001/api/getTag/${post.id}`
-  );
+  const response = await axios.get(`/api/getTag/${post.id}`);
   return response.data;
 };
 const Category = await getCategory();

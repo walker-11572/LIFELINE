@@ -23,7 +23,11 @@
     <a-row class="body">
       <a-col :span="18">
         <!--#region 标题、正文片段 -->
-        <router-link :to="{path:`/community/singleBlog/${props.post.id}`}" class="router-link" target="_blank">
+        <router-link
+          :to="{ path: `/community/singleBlog/${props.post.id}` }"
+          class="router-link"
+          target="_blank"
+        >
           {{ props.post.title }}
         </router-link>
         <a-typography-paragraph ellipsis class="text">
@@ -75,12 +79,10 @@ const props = defineProps({
 });
 let category = ref();
 let tags = ref();
-axios
-  .get(`http://127.0.0.1:7001/api/getCategory/${props.post.id}`)
-  .then((res) => {
-    category.value = res.data;
-  });
-axios.get(`http://127.0.0.1:7001/api/getTag/${props.post.id}`).then((res) => {
+axios.get(`/api/getCategory/${props.post.id}`).then((res) => {
+  category.value = res.data;
+});
+axios.get(`/api/getTag/${props.post.id}`).then((res) => {
   tags.value = res.data;
 });
 function formatDate(datetime: any) {

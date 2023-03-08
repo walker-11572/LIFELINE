@@ -97,7 +97,7 @@ const store = mainStore();
 const images = ["/1.jpg", "/2.png", "/3.jpg", "/4.jpg", "/5.jpg"];
 let isLoaded = ref(false);
 let postList = ref([]);
-axios.get("http://127.0.0.1:7001/api/generateHomePosts").then((response) => {
+axios.get("/api/generateHomePosts").then((response) => {
   postList.value = response.data;
   isLoaded.value = true;
 });
