@@ -21,7 +21,7 @@
               <a-input
                 size="large"
                 v-model="form.userInfo"
-                placeholder="手机号/邮箱/用户名"
+                placeholder="手机号/邮箱"
                 allow-clear
               >
                 <template #prefix>
@@ -218,7 +218,10 @@
 <script setup lang="ts">
 import Particles from "@/components/Particles/index.vue";
 import { useRouter } from "vue-router";
-import { reactive, toRefs, ref } from "vue";
+import { reactive, ref } from "vue";
+import axios from "axios";
+import { Message } from "@arco-design/web-vue";
+const router = useRouter();
 const loginType = ref("userInfo");
 const form = reactive({
   userInfo: "",
@@ -310,7 +313,38 @@ const rules = reactive({
   ],
 });
 // 表单提交
-function handleSubmit() {
+async function handleSubmit() {
   console.log(form);
+  try {
+    const response = await axios.get("/api/login", {
+      params: {
+        userInfo: form.userInfo,
+        password: form.password,
+      },
+    });
+    if (response.data.success) {
+      Message.success("登录成功");
+      // 跳转到主页面
+      setTimeout(() => {
+        router.push('/');
+      }, 1500);
+    } else {
+      Message.error("账号或密码错误");
+    }
+  } catch (error) {
+    if (error.response) {
+      if (error.response.status === 404) {
+        Message.error("账号不存在");
+      } else if (error.response.status === 401) {
+        Message.error("密码错误");
+      } else {
+        Message.error("服务器错误");
+      }
+    } else if (error.request) {
+      Message.error("网络错误");
+    } else {
+      Message.error("未知错误");
+    }
+  }
 }
 </script>
