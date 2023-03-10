@@ -4,7 +4,7 @@
       ><a-card class="p-3" :bordered="false">
         <!-- #region 标题 -->
         <a-row class="mt-1 fw-bold h2 mb-3">
-          {{ post.title }}
+          {{ blog.title }}
         </a-row>
         <!-- #endregion -->
         <!-- #region 标签 -->
@@ -20,8 +20,8 @@
             style="color: var(--color-neutral-6); font-size: 13px"
           >
             <!-- <icon-schedule size="18" class="me-2" /> -->
-            <span>{{ formatDateTime(post.created_at) }}</span>
-            <span class="ms-3">阅读 {{ post.view_count }}</span>
+            <span>{{ formatDateTime(blog.created_at) }}</span>
+            <span class="ms-3">阅读 {{ blog.view_count }}</span>
           </a-col>
         </a-row>
         <!-- #endregion -->
@@ -41,11 +41,8 @@
         <a-row class="mt-4" align="center" justify="space-between">
           <div class="d-flex">
             <!-- 点赞 -->
-            <button
-              class="a-btn me-4"
-              @click="store.topic.liked = !store.topic.liked"
-            >
-              <span v-if="store.topic.liked"
+            <button class="a-btn me-4" @click="like()">
+              <span v-if="isLiked"
                 ><icon-thumb-up-fill
                   size="20"
                   class="me-1"
@@ -53,13 +50,10 @@
                 />
               </span>
               <span v-else><icon-thumb-up size="20" class="me-1" /></span>
-              <span>{{ store.topic.likes }}</span>
+              <span>{{ liked_count }}</span>
             </button>
             <!-- 收藏 -->
-            <button
-              class="a-btn me-4"
-              @click="store.topic.starred = !store.topic.starred"
-            >
+            <button class="a-btn me-4" @click="like()">
               <span v-if="store.topic.starred"
                 ><icon-star-fill
                   size="20"
@@ -229,37 +223,75 @@ const topic = reactive({
   extraInfo: {},
   replyCount: "111",
 });
+const user_id = 1;
 const tempNum = topic.replyCount;
 const route = useRoute();
 const newReply = ref("");
 // #region Axios从后端获取文章
-const getPost = async () => {
-  const response = await axios.get(`/api/getPost/${route.params.blog_id}`);
+const getBlog = async () => {
+  const response = await axios.get(`/api/getBlog/${route.params.blog_id}`);
   return response.data;
 };
-const post = await getPost();
+const blog = await getBlog();
 // #endregion
 //#region Axios从后端获取标签和分类
 const getCategory = async () => {
-  const response = await axios.get(`/api/getCategory/${post.id}`);
+  const response = await axios.get(`/api/getCategory/${blog.id}`);
   return response.data;
 };
 const getTags = async () => {
-  const response = await axios.get(`/api/getTag/${post.id}`);
+  const response = await axios.get(`/api/getTag/${blog.id}`);
   return response.data;
 };
 const Category = await getCategory();
 const Tags = await getTags();
 // #endregion
+//#region 点赞功能
+const checkLikeable = async () => {
+  const response = await axios.get("/api/isLiked", {
+    params: {
+      user_id: 1,
+      likeable_id: blog.id,
+      likeable_type: "blog",
+    },
+  });
+  let res = await response.data;
+  if (res.length !== 0) return true;
+  else return false;
+};
+let isLiked = await checkLikeable();
+console.log(isLiked);
+const liked_count = ref(blog.liked_count);
+function like() {
+  console.log(isLiked);
+  if (isLiked) {
+    axios.delete(`/api/dislike/${user_id}/blog/${blog.id}`).then(() => {
+      --liked_count.value;
+      isLiked = false;
+    });
+  } else {
+    axios
+      .post("/api/like", {
+        likeable_id: blog.id,
+        likeable_type: "blog",
+        user_id: 1,
+      })
+      .then(() => {
+        ++liked_count.value;
+        isLiked = true;
+      });
+  }
+}
+// #endregion
 // #region 获取并加工文章标题
-const a = post.content.match(/<h[1-6]>([\s\S]*?)<\/h[1-6]>/g) || [];
+const a = blog.content.match(/<h[1-6]>([\s\S]*?)<\/h[1-6]>/g) || [];
 function handleBody() {
   let handledBody = "";
   let b = new Array();
   a?.forEach((item, index, arr) => {
     b[index] =
       item.slice(0, 3) + " id=" + '"' + `h-${index + 1}` + '"' + item.slice(3);
-    handledBody = post.content.replace(a[0], b[0]);
+    handledBody = blog.content.replace(a[0], b[0]);
     for (let i = 0; i < a?.length; i++) {
       handledBody = handledBody.replace(a[i], b[i]);
     }

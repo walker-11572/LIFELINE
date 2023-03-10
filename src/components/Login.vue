@@ -221,6 +221,8 @@ import { useRouter } from "vue-router";
 import { reactive, ref } from "vue";
 import axios from "axios";
 import { Message } from "@arco-design/web-vue";
+import { mainStore } from "@/store/index";
+const store = mainStore();
 const router = useRouter();
 const loginType = ref("userInfo");
 const form = reactive({
@@ -314,7 +316,6 @@ const rules = reactive({
 });
 // 表单提交
 async function handleSubmit() {
-  console.log(form);
   try {
     const response = await axios.get("/api/login", {
       params: {
@@ -326,7 +327,7 @@ async function handleSubmit() {
       Message.success("登录成功");
       // 跳转到主页面
       setTimeout(() => {
-        router.push('/');
+        router.push("/");
       }, 1500);
     } else {
       Message.error("账号或密码错误");
