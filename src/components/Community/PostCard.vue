@@ -77,14 +77,16 @@ const store = mainStore();
 const props = defineProps({
   post: Object,
 });
-let category = ref();
-let tags = ref();
-axios.get(`/api/getCategory/${props.post.id}`).then((res) => {
-  category.value = res.data;
-});
-axios.get(`/api/getTag/${props.post.id}`).then((res) => {
-  tags.value = res.data;
-});
+const getCategory = async () => {
+  const response = await axios.get(`/api/getCategory/${props.post.id}`);
+  return response.data;
+};
+const category = await getCategory();
+const getTag = async () => {
+  const response = await axios.get(`/api/getTag/${props.post.id}`);
+  return response.data;
+};
+const tags = await getTag();
 function formatDate(datetime: any) {
   return moment(datetime).fromNow();
 }
