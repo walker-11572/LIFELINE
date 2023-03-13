@@ -262,7 +262,7 @@ const rules = reactive({
   userInfo: [
     {
       required: true,
-      message: "请输入手机号/邮箱/用户名",
+      message: "请输入手机号或邮箱",
     },
   ],
   password: [

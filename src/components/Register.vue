@@ -19,7 +19,6 @@
               field="username"
               help="用户名 2-20 位，可包含文字、数字、下划线"
               :rules="rules.username"
-              :validate-trigger="['change', 'input']"
               hide-asterisk
               feedback
             >
@@ -35,64 +34,83 @@
               </a-input>
             </a-form-item>
             <!-- 手机及其验证码 -->
-            <a-form-item field="username" :rules="rules.phone" hide-asterisk>
-              <a-input-group>
-                <a-col :span="7">
-                  <a-select size="large" default-value="+86" allow-search>
-                    <template #prefix>
-                      <icon-mobile />
-                    </template>
-                    <a-option v-for="(country, index) of codes" :key="index">
-                      <span
-                        :class="`fi me-2 fi-${country.isoCode2.toLowerCase()}`"
-                      ></span>
-                      <span>+{{ country.countryCodes[0] }}</span>
-                    </a-option>
-                  </a-select>
-                </a-col>
-                <a-col :span="10">
+            <a-form-item>
+              <a-col :span="7" v-if="account === 'phone'">
+                <a-select size="large" v-model="form.isoCode" allow-search>
+                  <template #prefix>
+                    <icon-mobile :size="18" />
+                  </template>
+                  <a-option v-for="(country, index) of codes" :key="index">
+                    <span
+                      :class="`fi me-2 fi-${country.isoCode2.toLowerCase()}`"
+                    ></span>
+                    <span>+{{ country.countryCodes[0] }}</span>
+                  </a-option>
+                </a-select>
+              </a-col>
+              <a-col :span="10" v-if="account === 'phone'">
+                <a-form-item field="phone" no-style :rules="rules.phone">
                   <a-input
                     size="large"
                     v-model="form.phone"
                     placeholder="请输入手机号"
                     allow-clear
                   />
-                </a-col>
-                <!-- 验证码 -->
-                <a-col :span="7">
-                  <a-form-item no-style field="captcha" :rules="rules.captcha">
-                    <a-input
-                      size="large"
-                      v-model="form.captcha"
-                      class="pe-0"
-                      placeholder="验证码"
-                    >
-                      <template #suffix>
-                        <a-tooltip position="right" mini>
-                          <a-button style="height: 100%" @click="sendCaptcha()">
-                            <template #icon>
-                              <icon-shake
-                                style="font-size: 18px"
-                                v-show="!form.sendedCaptcha"
-                              />
-                              <icon-loading
-                                style="font-size: 18px"
-                                v-show="form.sendedCaptcha"
-                              />
-                            </template>
-                          </a-button>
-                          <template #content>
-                            <span v-if="form.sendedCaptcha">
-                              {{ form.timeCount }} 秒后可重新获取
-                            </span>
-                            <span v-else>获取验证码</span>
+                </a-form-item>
+              </a-col>
+              <a-col :span="17" v-if="account === 'email'">
+                <a-form-item field="email" no-style :rules="rules.email">
+                  <a-input
+                    size="large"
+                    v-model="form.email"
+                    placeholder="请输入邮箱"
+                    allow-clear
+                    ><template #prefix>
+                      <icon-email :size="18" />
+                    </template>
+                  </a-input>
+                </a-form-item>
+              </a-col>
+              <!-- 验证码 -->
+              <a-col :span="7">
+                <a-form-item no-style field="captcha" :rules="rules.captcha">
+                  <a-input
+                    size="large"
+                    v-model="form.captcha"
+                    class="pe-0"
+                    placeholder="验证码"
+                  >
+                    <template #suffix>
+                      <a-tooltip position="right" mini>
+                        <a-button style="height: 100%" @click="sendCaptcha()">
+                          <template #icon>
+                            <icon-shake
+                              style="font-size: 18px"
+                              v-show="!form.sendedCaptcha"
+                              v-if="account === 'phone'"
+                            />
+                            <icon-at
+                              style="font-size: 18px"
+                              v-show="!form.sendedCaptcha"
+                              v-if="account === 'email'"
+                            />
+                            <icon-loading
+                              style="font-size: 18px"
+                              v-show="form.sendedCaptcha"
+                            />
                           </template>
-                        </a-tooltip>
-                      </template>
-                    </a-input>
-                  </a-form-item>
-                </a-col>
-              </a-input-group>
+                        </a-button>
+                        <template #content>
+                          <span v-if="form.sendedCaptcha">
+                            {{ form.timeCount }} 秒后可重新获取
+                          </span>
+                          <span v-else>获取验证码</span>
+                        </template>
+                      </a-tooltip>
+                    </template>
+                  </a-input>
+                </a-form-item>
+              </a-col>
             </a-form-item>
             <!-- 密码 -->
             <a-form-item
@@ -140,7 +158,6 @@
               content-class=" justify-content-between"
               :rules="rules.agreement"
               hide-asterisk
-              :validate-trigger="['input']"
             >
               <a-checkbox v-model:checked="form.remember"
                 >同意 <a-link href="#">《用户协议》</a-link> 和
@@ -164,6 +181,30 @@
           </a-row>
           <a-row justify="center">
             <a-space :size="12">
+              <a-tooltip
+                content="邮箱"
+                position="top"
+                mini
+                v-if="account === 'phone'"
+              >
+                <a-button size="large" shape="round" @click="account = 'email'">
+                  <template #icon>
+                    <icon-email style="font-size: 20px" />
+                  </template>
+                </a-button>
+              </a-tooltip>
+              <a-tooltip
+                content="手机"
+                position="top"
+                mini
+                v-if="account === 'email'"
+              >
+                <a-button size="large" shape="round" @click="account = 'phone'">
+                  <template #icon>
+                    <icon-mobile style="font-size: 20px" />
+                  </template>
+                </a-button>
+              </a-tooltip>
               <a-tooltip content="微信" position="top" mini>
                 <a-button size="large" shape="round">
                   <template #icon>
@@ -200,20 +241,21 @@
           </a-row>
         </a-card>
       </a-col>
-      <!-- {{ form }} -->
     </a-row>
   </div>
 </template>
 <script setup lang="ts">
 import Particles from "@/components/Particles/index.vue";
 import { useRouter } from "vue-router";
-import { reactive, toRefs } from "vue";
+import { reactive, ref } from "vue";
 import codes from "country-calling-code";
 import "/node_modules/flag-icons/css/flag-icons.min.css";
+const account = ref("phone");
 // 表单数据
-const form = reactive({
+let form = reactive({
   username: "",
   email: "",
+  isoCode: "+86",
   phone: "",
   password: "",
   confirmPassword: "",
@@ -236,13 +278,13 @@ function sendCaptcha() {
 // 60s倒计时
 function countDown() {
   if (form.timeCount > 0) {
-    form.timeCount--;
+    --form.timeCount;
     setTimeout(() => {
       countDown();
     }, 1000);
-  } else if ((form.timeCount = 0)) {
+  } else if (form.timeCount === 0) {
     form.timeCount = 60;
-    form.sendedCaptcha = "0";
+    form.sendedCaptcha = "";
   }
 }
 // 表单验证规则
@@ -276,12 +318,8 @@ const rules = reactive({
   ],
   phone: [
     {
-      required: true,
-      message: "请输入手机号",
-    },
-    {
       validator: (phone: string, callback: any) => {
-        if (phone === "") {
+        if (!phone) {
           callback("请输入手机号");
         } else if (!/^[0-9]{11}$/.test(phone)) {
           callback("请输入正确的手机号");
@@ -297,17 +335,26 @@ const rules = reactive({
       message: "请输入验证码",
     },
     {
-      validator: (captcha: any, callback: any) => {
-        if (form.sendedCaptcha) {
-          if (captcha === "") {
-            callback("请输入验证码");
-          } else if (captcha !== form.sendedCaptcha) {
-            callback("请输入正确的验证码");
+      validator: (captcha: string, callback: any) => {
+        if (form.phone !== "" || form.email !== "") {
+          if (form.sendedCaptcha) {
+            if (!captcha) {
+              callback("请输入验证码");
+            } else if (form.captcha !== form.sendedCaptcha) {
+              callback("请输入正确的验证码");
+            }
           } else {
-            callback();
+            callback("请获取验证码");
           }
         } else {
-          callback("请先获取验证码");
+          switch (account.value) {
+            case "phone":
+              callback("请输入手机号");
+              break;
+            case "email":
+              callback("请输入邮箱");
+              break;
+          }
         }
       },
     },
