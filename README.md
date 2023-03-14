@@ -25,6 +25,10 @@
 - 数据库：MySQL
 
 ## 项目进展
+![首页](./public/readme.img/1.jpeg)
+![博文](./public/readme.img/2.jpeg)
+![登录](./public/readme.img/3.jpeg)
+![注册](./public/readme.img/4.jpeg)
 
 ### 注册登录✔️
 
