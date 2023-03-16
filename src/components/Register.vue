@@ -34,22 +34,31 @@
               </a-input>
             </a-form-item>
             <!-- 手机及其验证码 -->
-            <a-form-item>
+            <a-row style="padding: 0 8.3% 0 8.3%">
+              <!-- isoCode -->
               <a-col :span="7" v-if="account === 'phone'">
-                <a-select size="large" v-model="form.isoCode" allow-search>
-                  <template #prefix>
-                    <icon-mobile :size="18" />
-                  </template>
-                  <a-option v-for="(country, index) of codes" :key="index">
-                    <span
-                      :class="`fi me-2 fi-${country.isoCode2.toLowerCase()}`"
-                    ></span>
-                    <span>+{{ country.countryCodes[0] }}</span>
-                  </a-option>
-                </a-select>
+                <a-form-item field="isoCode" hide-asterisk hide-label>
+                  <a-select size="large" v-model="form.isoCode" allow-search>
+                    <template #prefix>
+                      <icon-mobile />
+                    </template>
+                    <a-option v-for="(country, index) of codes" :key="index">
+                      <span
+                        :class="`fi me-2 fi-${country.isoCode2.toLowerCase()}`"
+                      ></span>
+                      <span>+{{ country.countryCodes[0] }}</span>
+                    </a-option>
+                  </a-select>
+                </a-form-item>
               </a-col>
+              <!-- 手机注册 -->
               <a-col :span="10" v-if="account === 'phone'">
-                <a-form-item field="phone" no-style :rules="rules.phone">
+                <a-form-item
+                  field="phone"
+                  hide-asterisk
+                  hide-label
+                  :rules="rules.phone"
+                >
                   <a-input
                     size="large"
                     v-model="form.phone"
@@ -58,27 +67,38 @@
                   />
                 </a-form-item>
               </a-col>
+              <!-- 邮箱注册 -->
               <a-col :span="17" v-if="account === 'email'">
-                <a-form-item field="email" no-style :rules="rules.email">
+                <a-form-item
+                  field="email"
+                  hide-asterisk
+                  hide-label
+                  :rules="rules.email"
+                >
                   <a-input
                     size="large"
                     v-model="form.email"
                     placeholder="请输入邮箱"
                     allow-clear
                     ><template #prefix>
-                      <icon-email :size="18" />
+                      <icon-email />
                     </template>
                   </a-input>
                 </a-form-item>
               </a-col>
               <!-- 验证码 -->
               <a-col :span="7">
-                <a-form-item no-style field="captcha" :rules="rules.captcha">
+                <a-form-item
+                  field="captcha"
+                  hide-asterisk
+                  hide-label
+                  :rules="rules.captcha"
+                >
                   <a-input
                     size="large"
                     v-model="form.captcha"
-                    class="pe-0"
                     placeholder="验证码"
+                    class="pe-0"
                   >
                     <template #suffix>
                       <a-tooltip position="right" mini>
@@ -111,7 +131,7 @@
                   </a-input>
                 </a-form-item>
               </a-col>
-            </a-form-item>
+            </a-row>
             <!-- 密码 -->
             <a-form-item
               field="password"
@@ -331,10 +351,6 @@ const rules = reactive({
   ],
   captcha: [
     {
-      required: true,
-      message: "请输入验证码",
-    },
-    {
       validator: (captcha: string, callback: any) => {
         if (form.phone !== "" || form.email !== "") {
           if (form.sendedCaptcha) {
@@ -347,14 +363,7 @@ const rules = reactive({
             callback("请获取验证码");
           }
         } else {
-          switch (account.value) {
-            case "phone":
-              callback("请输入手机号");
-              break;
-            case "email":
-              callback("请输入邮箱");
-              break;
-          }
+          callback();
         }
       },
     },
