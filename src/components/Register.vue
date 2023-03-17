@@ -170,12 +170,10 @@
               </a-input-password>
             </a-form-item>
             <!-- 同意协议及条款 -->
-            <a-form-item
-              field="agreement"
-              :rules="rules.agreement"
-            >
+            <a-form-item field="agreement" :rules="rules.agreement">
               <a-checkbox v-model="checked">
-                &nbsp;同意<a-link href="#">《用户协议》</a-link>和<a-link href="#">《隐私政策》</a-link>
+                &nbsp;同意<a-link href="#">《用户协议》</a-link>
+                和<a-link href="#">《隐私政策》</a-link>
               </a-checkbox>
             </a-form-item>
             <!-- 注册按钮 -->
@@ -260,15 +258,18 @@
 </template>
 <script setup lang="ts">
 import Particles from "@/components/Particles/index.vue";
+import { Message } from "@arco-design/web-vue";
 import { useRouter } from "vue-router";
 import { reactive, ref } from "vue";
 import codes from "country-calling-code";
 import "/node_modules/flag-icons/css/flag-icons.min.css";
+import axios from "axios";
+const router = useRouter();
 const account = ref("phone");
 const timeCount = ref(60);
 const checked = ref(false);
 const captcha = ref("");
-const sendedCaptcha = ref('');
+const sendedCaptcha = ref("");
 const confirmPassword = ref("");
 // 表单数据
 let form = reactive({
@@ -279,9 +280,35 @@ let form = reactive({
   password: "",
 });
 // 发送表单数据
-function handleSubmit() {
-  console.log(form);
-}
+const handleSubmit = async ({ values, errors }) => {
+  console.log(values, errors);
+  if (!errors) {
+    try {
+      const response = await axios.post("/api/user/register", { ...values });
+      if (response.data.success) {
+        Message.success("注册成功");
+        // 跳转到主页面
+        setTimeout(() => {
+          router.push("/");
+        }, 1500);
+      }
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 404) {
+          Message.error("账号不存在");
+        } else if (error.response.status === 401) {
+          Message.error("密码错误");
+        } else {
+          Message.error("服务器错误");
+        }
+      } else if (error.request) {
+        Message.error("网络错误");
+      } else {
+        Message.error("未知错误");
+      }
+    }
+  }
+};
 // 发送验证码
 function sendCaptcha() {
   if (sendedCaptcha.value) return;
@@ -332,10 +359,12 @@ const rules = reactive({
   ],
   phone: [
     {
+      required: true,
+      message: "请输入手机号",
+    },
+    {
       validator: (phone: string, callback: any) => {
-        if (!phone) {
-          callback("请输入手机号");
-        } else if (!/^[0-9]{11}$/.test(phone)) {
+        if (!/^[0-9]{11}$/.test(phone)) {
           callback("请输入正确的手机号");
         } else {
           callback();
@@ -385,12 +414,10 @@ const rules = reactive({
   ],
   confirmPassword: [
     {
-      required: true,
-      message: "请再次输入密码",
-    },
-    {
-      validator: (confirmPassword: string, callback: any) => {
-        if (confirmPassword !== form.password) {
+      validator: (ConfirmPassword: string, callback: any) => {
+        if (!confirmPassword.value) {
+          callback("请再次输入密码");
+        } else if (confirmPassword.value !== form.password) {
           callback("两次输入的密码不一致");
         } else {
           callback();
@@ -400,7 +427,7 @@ const rules = reactive({
   ],
   agreement: [
     {
-      validator: (Checked:boolean, callback: any) => {
+      validator: (Checked: boolean, callback: any) => {
         if (checked.value) {
           callback();
         } else {

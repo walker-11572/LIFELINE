@@ -317,12 +317,7 @@ const rules = reactive({
 // 表单提交
 async function handleSubmit() {
   try {
-    const response = await axios.get("/api/login", {
-      params: {
-        userInfo: form.userInfo,
-        password: form.password,
-      },
-    });
+    const response = await axios.get("/api/login", { params: { ...form } });
     if (response.data.success) {
       Message.success("登录成功");
       // 跳转到主页面
