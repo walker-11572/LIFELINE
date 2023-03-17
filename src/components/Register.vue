@@ -96,7 +96,7 @@
                 >
                   <a-input
                     size="large"
-                    v-model="form.captcha"
+                    v-model="captcha"
                     placeholder="验证码"
                     class="pe-0"
                   >
@@ -106,23 +106,23 @@
                           <template #icon>
                             <icon-shake
                               style="font-size: 18px"
-                              v-show="!form.sendedCaptcha"
+                              v-show="!sendedCaptcha"
                               v-if="account === 'phone'"
                             />
                             <icon-at
                               style="font-size: 18px"
-                              v-show="!form.sendedCaptcha"
+                              v-show="!sendedCaptcha"
                               v-if="account === 'email'"
                             />
                             <icon-loading
                               style="font-size: 18px"
-                              v-show="form.sendedCaptcha"
+                              v-show="sendedCaptcha"
                             />
                           </template>
                         </a-button>
                         <template #content>
-                          <span v-if="form.sendedCaptcha">
-                            {{ form.timeCount }} 秒后可重新获取
+                          <span v-if="sendedCaptcha">
+                            {{ timeCount }} 秒后可重新获取
                           </span>
                           <span v-else>获取验证码</span>
                         </template>
@@ -137,7 +137,6 @@
               field="password"
               help="密码不少于 6 位，必须包含字母、数字、符号"
               :rules="rules.password"
-              :validate-trigger="['change', 'input']"
               hide-asterisk
             >
               <a-input-password
@@ -155,14 +154,13 @@
             <a-form-item
               field="confirmPassword"
               :rules="rules.confirmPassword"
-              :validate-trigger="['change']"
               hide-asterisk
               feedback
             >
               <a-input-password
                 size="large"
                 placeholder="确认密码"
-                v-model="form.confirmPassword"
+                v-model="confirmPassword"
                 allow-clear
                 :invisible-button="false"
               >
@@ -174,14 +172,10 @@
             <!-- 同意协议及条款 -->
             <a-form-item
               field="agreement"
-              :wrapper-col-props="{ span: 20 }"
-              content-class=" justify-content-between"
               :rules="rules.agreement"
-              hide-asterisk
             >
-              <a-checkbox v-model:checked="form.remember"
-                >同意 <a-link href="#">《用户协议》</a-link> 和
-                <a-link href="#">《隐私政策》</a-link>
+              <a-checkbox v-model="checked">
+                &nbsp;同意<a-link href="#">《用户协议》</a-link>和<a-link href="#">《隐私政策》</a-link>
               </a-checkbox>
             </a-form-item>
             <!-- 注册按钮 -->
@@ -271,6 +265,11 @@ import { reactive, ref } from "vue";
 import codes from "country-calling-code";
 import "/node_modules/flag-icons/css/flag-icons.min.css";
 const account = ref("phone");
+const timeCount = ref(60);
+const checked = ref(false);
+const captcha = ref("");
+const sendedCaptcha = ref('');
+const confirmPassword = ref("");
 // 表单数据
 let form = reactive({
   username: "",
@@ -278,11 +277,6 @@ let form = reactive({
   isoCode: "+86",
   phone: "",
   password: "",
-  confirmPassword: "",
-  captcha: "",
-  sendedCaptcha: "",
-  timeCount: 60,
-  remember: false,
 });
 // 发送表单数据
 function handleSubmit() {
@@ -290,21 +284,21 @@ function handleSubmit() {
 }
 // 发送验证码
 function sendCaptcha() {
-  if (form.sendedCaptcha) return;
-  form.sendedCaptcha = "123456";
+  if (sendedCaptcha.value) return;
+  sendedCaptcha.value = "123456";
   console.log(" captcha sended");
   countDown();
 }
 // 60s倒计时
 function countDown() {
-  if (form.timeCount > 0) {
-    --form.timeCount;
+  if (timeCount.value > 0) {
+    --timeCount.value;
     setTimeout(() => {
       countDown();
     }, 1000);
-  } else if (form.timeCount === 0) {
-    form.timeCount = 60;
-    form.sendedCaptcha = "";
+  } else if (timeCount.value === 0) {
+    timeCount.value = 60;
+    sendedCaptcha.value = "";
   }
 }
 // 表单验证规则
@@ -351,12 +345,12 @@ const rules = reactive({
   ],
   captcha: [
     {
-      validator: (captcha: string, callback: any) => {
+      validator: (Captcha: string, callback: any) => {
         if (form.phone !== "" || form.email !== "") {
-          if (form.sendedCaptcha) {
-            if (!captcha) {
+          if (sendedCaptcha.value) {
+            if (!captcha.value) {
               callback("请输入验证码");
-            } else if (form.captcha !== form.sendedCaptcha) {
+            } else if (captcha.value !== sendedCaptcha.value) {
               callback("请输入正确的验证码");
             }
           } else {
@@ -406,8 +400,13 @@ const rules = reactive({
   ],
   agreement: [
     {
-      required: true,
-      message: "请阅读并同意协议",
+      validator: (Checked:boolean, callback: any) => {
+        if (checked.value) {
+          callback();
+        } else {
+          callback("请阅读并同意协议");
+        }
+      },
     },
   ],
 });
