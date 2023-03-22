@@ -12,9 +12,8 @@ import Header from "./components/pages/Header.vue";
 import Footer from "./components/Footer.vue";
 import {watch} from 'vue';
 import axios from "axios";
-import { mainStore } from "@/store/index";
-const store = mainStore();
 axios.defaults.baseURL = "http://127.0.0.1:7001";
+axios.defaults.withCredentials = true;
 </script>
 <style src="./assets/scss/rings.scss" lang="scss"></style>
 <style lang="scss"></style>

@@ -213,8 +213,8 @@ import prism from "prismjs";
 import axios from "axios";
 import moment from "moment";
 import { useRoute } from "vue-router";
-import { mainStore } from "@/store/index";
-const store = mainStore();
+import { userStore } from "@/store/user";
+const store = userStore();
 const topic = reactive({
   time: "",
   user: "",
@@ -260,7 +260,6 @@ const checkLikeable = async () => {
   else return false;
 };
 let isLiked = await checkLikeable();
-console.log(isLiked);
 const liked_count = ref(blog.liked_count);
 function like() {
   console.log(isLiked);

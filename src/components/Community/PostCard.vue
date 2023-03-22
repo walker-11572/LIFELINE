@@ -67,13 +67,13 @@
 <script setup lang="ts">
 import CategoryTag from "@/components/community/CategoryTag.vue";
 import { ref, reactive } from "vue";
-import { mainStore } from "@/store/index";
+import { userStore } from "@/store/user";
 import axios from "axios";
 import moment from "moment";
 import { useRoute } from "vue-router";
 const route = useRoute();
 var showTag = route.path.includes("categorySingle");
-const store = mainStore();
+const store = userStore();
 const props = defineProps({
   post: Object,
 });

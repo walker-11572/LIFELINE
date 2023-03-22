@@ -287,9 +287,9 @@ const handleSubmit = async ({ values, errors }) => {
       const response = await axios.post("/api/user/register", { ...values });
       if (response.data.success) {
         Message.success("注册成功");
-        // 跳转到主页面
+        // 跳转到登录页面
         setTimeout(() => {
-          router.push("/");
+          router.push("/login");
         }, 1500);
       }
     } catch (error) {

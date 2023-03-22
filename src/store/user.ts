@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
-
-export const mainStore = defineStore("main", {
+export const userStore = defineStore("user", {
   state: () => {
     return {
       theme: "light",
@@ -15,8 +14,19 @@ export const mainStore = defineStore("main", {
       },
       csrfToken: "",
       sessionId: "",
+      userToken: "",
+      userId: "",
     };
   },
   getters: {},
   actions: {},
+  persist: {
+    enabled: true,
+    strategies: [
+      {
+        storage: localStorage,
+        paths: ["userId", "userToken", "theme"],
+      },
+    ],
+  },
 });

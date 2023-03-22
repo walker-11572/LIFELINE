@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import piniaPluginPersist from "pinia-plugin-persist";
 import ArcoVue from "@arco-design/web-vue";
 import ArcoVueIcon from "@arco-design/web-vue/es/icon";
 import Particles from "vue3-particles";
@@ -12,11 +13,13 @@ import "prismjs/themes/prism.css";
 import moment from "moment";
 import "moment/dist/locale/zh-cn";
 moment.locale("zh-cn");
+const pinia = createPinia();
+pinia.use(piniaPluginPersist);
 const app = createApp(App);
 app.config.globalProperties.$moment = moment
 app.use(ArcoVue);
 app.use(ArcoVueIcon);
-app.use(createPinia());
+app.use(pinia);
 app.use(Particles);
 app.use(router);
 app.mount("#app");
