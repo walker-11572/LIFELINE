@@ -214,6 +214,19 @@ function ToggleTheme() {
 }
 function CreateTopic() {
   router.push("/community/CreateTopic");
+function logout() {
+  axios
+    .get("/api/user/logout")
+    .then(() => {
+      store.userId = "";
+      Message.success("登出成功");
+      setTimeout(() => {
+        router.push("/login");
+      }, 1500);
+    })
+    .catch((error) => {
+      throw error;
+    });
 }
 watch(
   () => store.theme,
