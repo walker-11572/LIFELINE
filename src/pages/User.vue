@@ -1,5 +1,5 @@
 <template>
-    <h1>Category</h1>
+    <h1>userInfo</h1>
 </template>
 <script setup lang="ts">
 import {ref} from 'vue';

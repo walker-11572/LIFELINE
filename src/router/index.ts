@@ -57,11 +57,26 @@ export default createRouter({
           path: "CreateTopic",
           name: "Community/CreateTopic",
           component: () => import("@/pages/Community/CreateTopic.vue"),
-        }
+        },
+        {
+          path: "settings",
+          name: "Settings",
+          component: () => import("../pages/Settings.vue"),
+        },
+        {
+          path: "user",
+          name: "UserCenter",
+          component: () => import("../pages/User.vue"),
+        },
         {
           path: "search/:keyword",
           name: "Search",
           component: () => import("../pages/Community/Search.vue"),
+        },
+        {
+          path: "messages",
+          name: "Messages",
+          component: () => import("../pages/Community/Message.vue"),
         },
       ],
     },

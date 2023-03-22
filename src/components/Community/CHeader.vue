@@ -145,11 +145,7 @@
         </template>
       </a-dropdown>
       <!-- 消息 -->
-      <a-button
-        type="text"
-        class="nav-btn"
-        @click="router.push('/community/messages')"
-      >
+      <a-button type="text" class="nav-btn" @click="router.push('/community/messages')">
         <icon-message class="nav-icon" />
       </a-button>
     </a-col>
@@ -159,13 +155,19 @@
         <a-avatar class="avatar" :size="36" :image-url="avatar" />
         <template #content class="">
           <div class="d-flex flex-column">
-            <a-doption class="set-btn" @click="router.push('/community/user')">
+            <a-doption
+              class="set-btn"
+              @click="router.push('/community/user')"
+            >
               <template #icon>
                 <icon-user />
               </template>
               <template #default> 个人中心 </template>
             </a-doption>
-            <a-doption class="set-btn">
+            <a-doption
+              class="set-btn"
+              @click="router.push('/community/settings')"
+            >
               <template #icon>
                 <icon-settings />
               </template>
