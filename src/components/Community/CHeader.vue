@@ -120,9 +120,7 @@
     <!-- 用户头像 -->
     <a-col :span="1">
       <a-dropdown trigger="hover">
-        <a-avatar class="avatar">
-          <img src="@/assets/avatar.png" alt="" />
-        </a-avatar>
+        <a-avatar class="avatar" :size="36" :image-url="avatar" />
         <template #content class="">
           <div class="d-flex flex-column">
             <a-doption class="set-btn">
@@ -193,6 +191,7 @@ const router = useRouter();
 const route = useRoute();
 const store = mainStore();
 const MyTheme = ref(store.theme);
+const avatar = ref("/src/assets/defaultAvatar.png");
 function ChangeTab(id: string) {
   if (id === "index") {
     router.push("/community/home");
@@ -214,6 +213,17 @@ function ToggleTheme() {
 }
 function CreateTopic() {
   router.push("/community/CreateTopic");
+// #region 获取用户头像
+axios
+  .get(`/api/user/avatar/${store.userId}`)
+  .then((response) => {
+    avatar.value = `http://127.0.0.1:7001/public/${response.data.avatar}`;
+  })
+  .catch((error) => {
+    throw error;
+  });
+//#endregion
+
 function logout() {
   axios
     .get("/api/user/logout")
