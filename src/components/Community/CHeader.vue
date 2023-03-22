@@ -6,12 +6,12 @@
         <img
           src="@/assets/LOGO.png"
           style="width: 90%"
-          v-show="MyTheme === 'light'"
+          v-show="store.theme === 'light'"
         />
         <img
           src="@/assets/LOGO-dark.png"
-          style="width: 70%"
-          v-show="MyTheme === 'dark'"
+          style="width: 90%"
+          v-show="store.theme === 'dark'"
         />
       </router-link>
     </a-col>
@@ -135,7 +135,7 @@
               </template>
               <template #default> 全局设置 </template>
             </a-doption>
-            <a-doption class="set-btn">
+            <a-doption class="set-btn" @click="logout()">
               <template #icon>
                 <icon-export />
               </template>
@@ -147,30 +147,18 @@
     </a-col>
     <!-- 发布话题 -->
     <a-col flex="auto" class="d-flex justify-content-end">
-      <a-dropdown trigger="hover">
-        <a-button
-          type="primary"
-          shape="circle"
-          size="large"
-          class="me-3"
-          @click="CreateTopic()"
-        >
-          <template #icon>
-            <icon-plus :style="{ fontSize: '23px' }" />
-          </template>
-        </a-button>
-        <template #content>
-          <a-doption
-            class="d-flex justify-content-end"
-            @click="ChangeTheme('light')"
-          >
-            <template #icon>
-              <icon-check v-show="store.theme === 'light'" />
-            </template>
-            <template #default> 浅色模式 </template>
-          </a-doption>
+      <a-button
+        type="primary"
+        shape="circle"
+        size="large"
+        class="me-3"
+        @click="router.push('/community/CreateTopic')"
+        title="发布话题"
+      >
+        <template #icon>
+          <icon-plus :style="{ fontSize: '23px' }" />
         </template>
-      </a-dropdown>
+      </a-button>
     </a-col>
   </a-row>
 </template>
@@ -178,19 +166,20 @@
 <script setup lang="ts">
 import { ref, reactive, watch, onMounted, onBeforeUnmount } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { mainStore } from "@/store/index";
+import { userStore } from "@/store/user";
+import axios from "axios";
+import { Message } from "@arco-design/web-vue";
 const props = defineProps({
   page: String,
 });
-let isActive = reactive({
-  index: true,
+const isActive = reactive({
+  index: false,
   category: false,
   trending: false,
 });
 const router = useRouter();
 const route = useRoute();
-const store = mainStore();
-const MyTheme = ref(store.theme);
+const store = userStore();
 const avatar = ref("/src/assets/defaultAvatar.png");
 function ChangeTab(id: string) {
   if (id === "index") {
@@ -201,18 +190,6 @@ function ChangeTab(id: string) {
     router.push("/community/trending");
   }
 }
-function ChangeTheme(value: string) {
-  store.theme = value;
-}
-function ToggleTheme() {
-  if (store.theme === "light") {
-    store.theme = "dark";
-  } else if (store.theme === "dark") {
-    store.theme = "light";
-  }
-}
-function CreateTopic() {
-  router.push("/community/CreateTopic");
 // #region 获取用户头像
 axios
   .get(`/api/user/avatar/${store.userId}`)
@@ -238,63 +215,65 @@ function logout() {
       throw error;
     });
 }
-watch(
-  () => store.theme,
-  (val) => {
-    if (val === "light") {
-      document.body.removeAttribute("arco-theme");
-      MyTheme.value = "light";
-      console.log(store.theme);
-    } else if (val === "dark") {
-      document.body.setAttribute("arco-theme", store.theme);
-      MyTheme.value = "dark";
-      console.log(store.theme);
-    } else if (val === "FollowSystem") {
+
+// #region 切换主题
+function watchTheme(value: string) {
+  switch (value) {
+    case "light":
+      {
+        document.body.removeAttribute("arco-theme");
+        console.log(store.theme);
+      }
+      break;
+    case "dark":
+      {
+        document.body.setAttribute("arco-theme", store.theme);
+        console.log(store.theme);
+      }
+      break;
+    case "FollowSystem": {
       if (
         window.matchMedia &&
         window.matchMedia("(prefers-color-scheme: dark)").matches
       ) {
         document.body.setAttribute("arco-theme", "dark");
-        MyTheme.value = "dark";
       } else {
         document.body.removeAttribute("arco-theme");
-        MyTheme.value = "light";
       }
     }
   }
-);
-// tab activity 切换
+}
+watchTheme(store.theme);
+function ChangeTheme(value: string) {
+  store.theme = value;
+  watchTheme(store.theme);
+}
+function ToggleTheme() {
+  if (store.theme === "light") {
+    store.theme = "dark";
+    watchTheme(store.theme);
+  } else if (store.theme === "dark") {
+    store.theme = "light";
+    watchTheme(store.theme);
+  }
+}
+//#endregion
+
+// #region tab activity 切换
+function activity(val: string) {
+  isActive.index = val === "/community/home";
+  isActive.category = val === "/community/category";
+  isActive.trending = val === "/community/trending";
+}
+activity(route.path);
 watch(
   () => route.path,
   (val) => {
-    switch (val) {
-      default: {
-        isActive.index = false;
-        isActive.category = false;
-        isActive.trending = false;
-        break;
-      }
-      case "/community/home": {
-        isActive.index = true;
-        isActive.category = false;
-        isActive.trending = false;
-        break;
-      }
-      case "/community/category": {
-        isActive.index = false;
-        isActive.category = true;
-        isActive.trending = false;
-        break;
-      }
-      case "/community/trending": {
-        isActive.index = false;
-        isActive.category = false;
-        isActive.trending = true;
-        break;
-      }
-    }
+    activity(val);
   }
 );
+//#endregion
+
 // #region header出现&隐藏
 let lastScrollY = 0;
 function hide() {
