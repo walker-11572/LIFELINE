@@ -16,6 +16,7 @@ export const userStore = defineStore("user", {
       sessionId: "",
       userToken: "",
       userId: "",
+      searchHistory:[] as string[],
     };
   },
   getters: {},
@@ -25,7 +26,7 @@ export const userStore = defineStore("user", {
     strategies: [
       {
         storage: localStorage,
-        paths: ["userId", "userToken", "theme"],
+        paths: ["userId", "userToken", "theme","searchHistory"],
       },
     ],
   },

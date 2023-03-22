@@ -43,8 +43,40 @@
       分类
     </a-col>
     <!-- 搜索 -->
-    <a-col class="ms-4" :lg="{ span: 8 }" :xxl="{ span: 5 }">
-      <a-input-search placeholder="Search" />
+    <a-col class="ms-4 position-relative" :lg="{ span: 8 }" :xxl="{ span: 5 }">
+      <a-input-search
+        placeholder="Search"
+        v-model="keyword"
+        @search="Search(keyword)"
+        @focus="showSearchHistory = true"
+        @blur="onBlur()"
+      />
+      <a-list
+        style="background-color: var(--color-bg-3)"
+        v-show="showSearchHistory && store.searchHistory.length !== 0"
+        class="position-absolute w-100"
+        size="small"
+      >
+        <template #header>
+          <a-row align="center" justify="space-between">
+            <div
+              style="font-size: 12px; color: var(--color-neutral-6)"
+              class="ms-2"
+            >
+              搜索历史
+            </div>
+            <a-button size="mini" type="text" @click="store.searchHistory = []"
+              >清空</a-button
+            >
+          </a-row>
+        </template>
+        <a-list-item
+          class="list-item"
+          v-for="item in store.searchHistory"
+          @click="Search(item)"
+          >{{ item }}</a-list-item
+        >
+      </a-list>
     </a-col>
     <!-- 功能按钮 -->
     <a-col flex="160px" class="d-flex justify-content-end">
@@ -113,7 +145,11 @@
         </template>
       </a-dropdown>
       <!-- 消息 -->
-      <a-button type="text" class="nav-btn">
+      <a-button
+        type="text"
+        class="nav-btn"
+        @click="router.push('/community/messages')"
+      >
         <icon-message class="nav-icon" />
       </a-button>
     </a-col>
@@ -123,7 +159,7 @@
         <a-avatar class="avatar" :size="36" :image-url="avatar" />
         <template #content class="">
           <div class="d-flex flex-column">
-            <a-doption class="set-btn">
+            <a-doption class="set-btn" @click="router.push('/community/user')">
               <template #icon>
                 <icon-user />
               </template>
@@ -154,6 +190,7 @@
         class="me-3"
         @click="router.push('/community/CreateTopic')"
         title="发布话题"
+        v-show="route.path !== '/community/CreateTopic'"
       >
         <template #icon>
           <icon-plus :style="{ fontSize: '23px' }" />
@@ -181,6 +218,8 @@ const router = useRouter();
 const route = useRoute();
 const store = userStore();
 const avatar = ref("/src/assets/defaultAvatar.png");
+const keyword = ref("");
+const showSearchHistory = ref(false);
 function ChangeTab(id: string) {
   if (id === "index") {
     router.push("/community/home");
@@ -189,6 +228,18 @@ function ChangeTab(id: string) {
   } else if (id === "trending") {
     router.push("/community/trending");
   }
+}
+function Search(value: string) {
+  if (value !== "") {
+    if (store.searchHistory.every((val) => value !== val))
+      store.searchHistory.push(value);
+    router.push(`/community/search/${value}`);
+  }
+}
+function onBlur() {
+  setTimeout(() => {
+    showSearchHistory.value = false;
+  }, 100);
 }
 // #region 获取用户头像
 axios
@@ -209,7 +260,7 @@ function logout() {
       Message.success("登出成功");
       setTimeout(() => {
         router.push("/login");
-      }, 1500);
+      }, 1000);
     })
     .catch((error) => {
       throw error;
@@ -290,6 +341,7 @@ function hide() {
 }
 onMounted(() => {
   window.addEventListener("scroll", hide, true);
+  document.querySelector(".arco-list-header").style.padding = "7px";
 });
 onBeforeUnmount(() => {
   window.removeEventListener("scroll", hide, true);
@@ -297,7 +349,7 @@ onBeforeUnmount(() => {
 //#endregion
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .menu {
   box-sizing: border-box;
   width: 100%;
@@ -309,13 +361,11 @@ onBeforeUnmount(() => {
   background-color: var(--color-bg-1);
   transition: all 0.2s;
 }
-
 .nav-btn {
   width: 30px;
   padding: 0;
   margin-right: 15px;
 }
-
 .nav-text {
   font-size: 20px;
   font-weight: bold;
@@ -326,28 +376,28 @@ onBeforeUnmount(() => {
   color: rgb(var(--arcoblue-4));
   margin-left: 3px;
   margin-right: 3px;
+  &:hover {
+    color: rgb(var(--arcoblue-6));
+  }
 }
-
-.nav-text:hover {
-  color: rgb(var(--arcoblue-6));
-  /* border-bottom: 2px solid rgb(var(--arcoblue-6)); */
-}
-
 .active {
   color: rgb(var(--arcoblue-6));
   border-bottom: 2px solid rgb(var(--arcoblue-6));
 }
-
 .nav-icon {
   font-size: 24px;
   color: var(--color-neutral-8);
 }
-
 .avatar {
   cursor: pointer;
+  &:hover {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
 }
-
-.avatar:hover {
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+.list-item {
+  cursor: pointer;
+  &:hover {
+    background-color: var(--color-neutral-2);
+  }
 }
 </style>

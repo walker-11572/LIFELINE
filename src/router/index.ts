@@ -4,7 +4,7 @@ export default createRouter({
   routes: [
     {
       path: "/",
-      redirect: '/community/home',
+      redirect: "/community/home",
       name: "Lines/community",
       // component: () => import("@/pages/Community/Community.vue"),
     },
@@ -24,7 +24,7 @@ export default createRouter({
       component: () => import("@/pages/Community/Community.vue"),
       children: [
         {
-          path: '',
+          path: "",
           name: "Community",
           component: () => import("@/pages/Community/Home.vue"),
         },
@@ -34,8 +34,8 @@ export default createRouter({
           component: () => import("@/pages/Community/Home.vue"),
         },
         {
-          path:"singleBlog/:blog_id",
-          name:"Community/SingleBlog",
+          path: "singleBlog/:blog_id",
+          name: "Community/SingleBlog",
           component: () => import("@/pages/Community/SingleBlog.vue"),
         },
         {
@@ -58,6 +58,11 @@ export default createRouter({
           name: "Community/CreateTopic",
           component: () => import("@/pages/Community/CreateTopic.vue"),
         }
+        {
+          path: "search/:keyword",
+          name: "Search",
+          component: () => import("../pages/Community/Search.vue"),
+        },
       ],
     },
   ],
