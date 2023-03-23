@@ -145,35 +145,58 @@
         </template>
       </a-dropdown>
       <!-- 消息 -->
-      <a-button type="text" class="nav-btn" @click="router.push('/community/messages')">
-        <icon-message class="nav-icon" />
-      </a-button>
+      <a-dropdown trigger="hover">
+        <a-button
+          type="text"
+          class="nav-btn"
+          @click="router.push('/community/notification')"
+          ><a-badge :count="count[0]" :dot-style="{ fontSize: '14px' }">
+            <icon-notification class="nav-icon" />
+          </a-badge>
+        </a-button>
+        <template #content>
+          <a-doption
+            ><span> 评论和@ </span
+            ><a-badge :count="count[1]" class="d-inline-flex ms-2"
+          /></a-doption>
+          <a-doption
+            ><span> 新增粉丝 </span>
+            <a-badge :count="count[2]" class="d-inline-flex ms-2" />
+          </a-doption>
+          <a-doption
+            ><span> 赞和收藏 </span>
+            <a-badge :count="count[3]" class="d-inline-flex ms-2" />
+          </a-doption>
+          <a-doption
+            ><span>私信&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <a-badge :count="count[4]" class="d-inline-flex ms-2" />
+          </a-doption>
+          <a-doption
+            ><span> 系统通知 </span>
+            <a-badge :count="count[5]" class="d-inline-flex ms-2" />
+          </a-doption>
+        </template>
+      </a-dropdown>
     </a-col>
     <!-- 用户头像 -->
     <a-col :span="1">
       <a-dropdown trigger="hover">
         <a-avatar class="avatar" :size="36" :image-url="avatar" />
-        <template #content class="">
+        <template #content>
           <div class="d-flex flex-column">
-            <a-doption
-              class="set-btn"
-              @click="router.push('/community/user')"
-            >
+            <a-doption @click="router.push('/community/user')">
               <template #icon>
                 <icon-user />
               </template>
               <template #default> 个人中心 </template>
             </a-doption>
-            <a-doption
-              class="set-btn"
-              @click="router.push('/community/settings')"
-            >
+            <a-doption @click="router.push('/community/settings')">
               <template #icon>
                 <icon-settings />
               </template>
               <template #default> 全局设置 </template>
             </a-doption>
-            <a-doption class="set-btn" @click="logout()">
+            <a-doption @click="logout()">
               <template #icon>
                 <icon-export />
               </template>
@@ -222,6 +245,7 @@ const store = userStore();
 const avatar = ref("/src/assets/defaultAvatar.png");
 const keyword = ref("");
 const showSearchHistory = ref(false);
+const count = reactive([1, 0, 0, 0, 0, 0]);
 function ChangeTab(id: string) {
   if (id === "index") {
     router.push("/community/home");

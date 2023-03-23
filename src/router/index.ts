@@ -74,9 +74,9 @@ export default createRouter({
           component: () => import("../pages/Community/Search.vue"),
         },
         {
-          path: "messages",
-          name: "Messages",
-          component: () => import("../pages/Community/Message.vue"),
+          path: "notification",
+          name: "Notification",
+          component: () => import("../pages/Community/Notification.vue"),
         },
       ],
     },

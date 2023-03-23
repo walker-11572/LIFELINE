@@ -1,5 +1,5 @@
 <template>
-    <h1>Message</h1>
+    <h1>Notification</h1>
 </template>
 <script setup lang="ts">
 import {ref} from 'vue';
