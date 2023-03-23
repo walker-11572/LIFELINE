@@ -24,23 +24,23 @@
     >
       首页
     </a-col>
-    <!-- 版块 -->
+    <!-- 分类 -->
     <a-col
       :span="1"
       class="nav-text"
       @click="ChangeTab('category')"
       :class="{ active: isActive.category }"
     >
-      版块
+      分类
     </a-col>
-    <!-- 分类 -->
+    <!-- 趋势 -->
     <a-col
       :span="1"
       class="nav-text"
       @click="ChangeTab('trending')"
       :class="{ active: isActive.trending }"
     >
-      分类
+      趋势
     </a-col>
     <!-- 搜索 -->
     <a-col class="ms-4 position-relative" :lg="{ span: 8 }" :xxl="{ span: 5 }">
