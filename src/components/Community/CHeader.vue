@@ -245,7 +245,7 @@ const store = userStore();
 const avatar = ref("/src/assets/defaultAvatar.png");
 const keyword = ref("");
 const showSearchHistory = ref(false);
-const count = reactive([1, 0, 0, 0, 0, 0]);
+const count = reactive([1, 0, 0, 0, 0, 1]);
 function ChangeTab(id: string) {
   if (id === "index") {
     router.push("/community/home");

@@ -11,6 +11,7 @@ import "animate.css";
 import Header from "./components/pages/Header.vue";
 import Footer from "./components/Footer.vue";
 import {watch} from 'vue';
+import { userStore } from "@/store/user";
 import axios from "axios";
 axios.defaults.baseURL = "http://127.0.0.1:7001";
 axios.defaults.withCredentials = true;

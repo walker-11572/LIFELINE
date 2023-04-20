@@ -43,26 +43,18 @@
             <!-- 点赞 -->
             <button class="a-btn me-4" @click="like()">
               <span v-if="isLiked"
-                ><icon-thumb-up-fill
-                  size="20"
-                  class="me-1"
-                  style="color: rgb(var(--arcoblue-6))"
-                />
+                ><icon-thumb-up-fill size="20" class="me-1" style="color: rgb(var(--arcoblue-6))" />
               </span>
               <span v-else><icon-thumb-up size="20" class="me-1" /></span>
               <span>{{ liked_count }}</span>
             </button>
             <!-- 收藏 -->
-            <button class="a-btn me-4" @click="like()">
-              <span v-if="store.topic.starred"
-                ><icon-star-fill
-                  size="20"
-                  class="me-1"
-                  style="color: rgb(var(--yellow-6))"
-                />
+            <button class="a-btn me-4" @click="collect()">
+              <span v-if="isCollected"
+                ><icon-star-fill size="20" class="me-1" style="color: rgb(var(--yellow-6))" />
               </span>
               <span v-else><icon-star size="20" class="me-1" /></span>
-              <span>{{ store.topic.stars }}</span>
+              <span>{{ collected_count }}</span>
             </button>
             <!-- 评论 -->
             <a href="#myReply" style="text-decoration: none">
@@ -87,12 +79,7 @@
               <icon-share-alt size="20" class="me-2" />
             </button>
             <button class="a-btn">
-              <svg
-                viewBox="0 0 1127 1024"
-                width="20"
-                height="20"
-                fill="var(--color-neutral-8)"
-              >
+              <svg viewBox="0 0 1127 1024" width="20" height="20" fill="var(--color-neutral-8)">
                 <path
                   d="M1108.468296 824.890547C1159.055032 910.219597 1097.227863 1024 990.429373 1024L130.432879 1024C29.258031 1024-32.574625 910.219597 18.012112 824.890547L450.825613 68.266574C473.306472 22.754136 518.276424 0 563.240888 0 608.209469 0 653.173934 22.754136 675.660283 68.266574L1108.468296 824.890547 1108.468296 824.890547 1108.468296 824.890547 1108.468296 824.890547ZM1020.384123 877.110641 1019.583053 875.735153 586.77504 119.111177 583.854223 113.62523C580.333998 106.500274 573.244216 102.4 563.240888 102.4 553.240806 102.4 546.151071 106.500212 542.636068 113.61633L539.710577 119.111663 106.096287 877.110641C95.301134 895.319767 109.937021 921.6 130.432879 921.6L990.429373 921.6C1016.30634 921.6 1031.298263 895.520476 1020.384123 877.110641L1020.384123 877.110641 1020.384123 877.110641 1020.384123 877.110641ZM558.08319 307.2C532.482248 307.2 512 322.819385 512 342.344809L512 579.251379C512 598.776801 532.482248 614.4 558.08319 614.4L568.321812 614.4C593.922749 614.4 614.4 598.776801 614.4 579.251379L614.4 342.344809C614.4 322.819385 593.922749 307.2 568.321812 307.2L558.08319 307.2 558.08319 307.2 558.08319 307.2 558.08319 307.2ZM512 766.885176C512 780.001705 517.522432 793.032632 526.999818 802.305669 536.477199 811.577487 549.797038 816.975247 563.200625 816.975247 576.602962 816.975247 589.927798 811.577487 599.405184 802.305669 608.882565 793.032632 614.4 780.001705 614.4 766.885176 614.4 753.772319 608.882565 740.741391 599.405184 731.469573 589.927798 722.19776 576.602962 716.8 563.200625 716.8 549.797038 716.8 536.477199 722.19776 526.999818 731.469573 517.522432 740.741391 512 753.772319 512 766.885176L512 766.885176 512 766.885176 512 766.885176Z"
                 ></path>
@@ -155,16 +142,10 @@
           </div>
         </div>
         <div class="d-flex justify-content-around abc">
-          <a-button long class="me-2" size="large" v-if="store.topic.subscribed"
-            >已关注</a-button
-          >
+          <a-button long class="me-2" size="large" v-if="store.topic.subscribed">已关注</a-button>
           <!-- TODO 穿插加载中按钮 -->
-          <a-button type="primary" long class="me-2" size="large" v-else
-            >关注</a-button
-          >
-          <a-button type="outline" long class="ms-2" size="large"
-            >私信</a-button
-          >
+          <a-button type="primary" long class="me-2" size="large" v-else>关注</a-button>
+          <a-button type="outline" long class="ms-2" size="large">私信</a-button>
         </div>
         <!-- #endregion -->
       </a-card>
@@ -177,7 +158,7 @@
   </a-row>
   <!--#region 推荐帖子 -->
   <a-row
-    style="height: 60px; color: var(--color-neutral-8); font-size: 16px"
+    style="height: 60px; color: var(--color-neutral-8); font-size: 16px; margin-bottom: 20px"
     align="end"
     justify="space-between"
     id="height5"
@@ -190,15 +171,9 @@
         style="background-color: var(--color-neutral-3)"
     /></a-col>
   </a-row>
-  <a-row justify="center">
-    <a-col :span="24"><a-divider :margin="16" /></a-col>
-  </a-row>
+
   <!-- 帖子 -->
-  <!-- <PostCard
-    :Title="store.topic.title"
-    :Category="store.topic.category"
-    :ExtraInfos="ExtraInfos"
-  /> -->
+  <PostCard v-for="post in postList" :key="post.id" :post="post" />
   <!-- #endregion -->
   <a-back-top />
 </template>
@@ -227,6 +202,10 @@ const user_id = 1;
 const tempNum = topic.replyCount;
 const route = useRoute();
 const newReply = ref("");
+let postList = ref([]);
+axios.get("/api/generateHomePosts").then((response) => {
+  postList.value = response.data;
+});
 // #region Axios从后端获取文章
 const getBlog = async () => {
   const response = await axios.get(`/api/getBlog/${route.params.blog_id}`);
@@ -282,14 +261,49 @@ function like() {
   }
 }
 // #endregion
+//#region 收藏功能
+const checkCollected = async () => {
+  const response = await axios.get("/api/isCollected", {
+    params: {
+      user_id: 1,
+      likeable_id: blog.id,
+      likeable_type: "blog",
+    },
+  });
+  let res = await response.data;
+  if (res.length !== 0) return true;
+  else return false;
+}
+let isCollected = await checkCollected();
+const collected_count = ref(blog.collected_count);
+function collect() {
+  console.log(isCollected);
+  if (isCollected) {
+    axios.delete(`/api/uncollect/${user_id}/blog/${blog.id}`).then(() => {
+      --collected_count.value;
+      isCollected = false;
+    });
+  } else {
+    axios
+      .post("/api/collect", {
+        post_id: blog.id,
+        post_type: "blog",
+        user_id: 1,
+      })
+      .then(() => {
+        ++collected_count.value;
+        isCollected = true;
+      });
+  }
+}
+// #endregion
 // #region 获取并加工文章标题
 const a = blog.content.match(/<h[1-6]>([\s\S]*?)<\/h[1-6]>/g) || [];
 function handleBody() {
   let handledBody = "";
   let b = new Array();
   a?.forEach((item, index, arr) => {
-    b[index] =
-      item.slice(0, 3) + " id=" + '"' + `h-${index + 1}` + '"' + item.slice(3);
+    b[index] = item.slice(0, 3) + " id=" + '"' + `h-${index + 1}` + '"' + item.slice(3);
     handledBody = blog.content.replace(a[0], b[0]);
     for (let i = 0; i < a?.length; i++) {
       handledBody = handledBody.replace(a[i], b[i]);
