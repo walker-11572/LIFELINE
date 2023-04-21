@@ -181,7 +181,7 @@
     <!-- 用户头像 -->
     <a-col :span="1">
       <a-dropdown trigger="hover">
-        <a-avatar class="avatar" :size="36" :image-url="avatar" />
+        <Avatar :size="36" :userId="store.userId"/>
         <template #content>
           <div class="d-flex flex-column">
             <a-doption @click="router.push('/community/user')">
@@ -226,6 +226,7 @@
 </template>
 
 <script setup lang="ts">
+import Avatar from "@/components/Avatar.vue";
 import { ref, reactive, watch, onMounted, onBeforeUnmount } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { userStore } from "@/store/user";
@@ -267,17 +268,6 @@ function onBlur() {
     showSearchHistory.value = false;
   }, 100);
 }
-// #region 获取用户头像
-axios
-  .get(`/api/user/avatar/${store.userId}`)
-  .then((response) => {
-    avatar.value = `http://127.0.0.1:7001/public/${response.data.avatar}`;
-  })
-  .catch((error) => {
-    throw error;
-  });
-//#endregion
-
 function logout() {
   axios
     .get("/api/user/logout")
@@ -413,12 +403,6 @@ onBeforeUnmount(() => {
 .nav-icon {
   font-size: 24px;
   color: var(--color-neutral-8);
-}
-.avatar {
-  cursor: pointer;
-  &:hover {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  }
 }
 .list-item {
   cursor: pointer;
