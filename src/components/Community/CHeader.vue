@@ -243,7 +243,6 @@ const isActive = reactive({
 const router = useRouter();
 const route = useRoute();
 const store = userStore();
-const avatar = ref("/src/assets/defaultAvatar.png");
 const keyword = ref("");
 const showSearchHistory = ref(false);
 const count = reactive([1, 0, 0, 0, 0, 1]);

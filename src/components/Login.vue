@@ -317,10 +317,10 @@ const rules = reactive({
 // 表单提交
 async function handleSubmit() {
   try {
-    const response = await axios.get("/api/login", { params: { ...form } });
+    const response = await axios.post("/api/login", { ...form } );
     if (response.data.success) {
       Message.success("登录成功");
-      store.userId = response.data.id;
+      store.userId = response.data.id.toString();
       // 跳转到主页面
       setTimeout(() => {
         router.push("/");

@@ -36,7 +36,7 @@
             <!-- 手机及其验证码 -->
             <a-row style="padding: 0 8.3% 0 8.3%">
               <!-- isoCode -->
-              <a-col :span="7" v-if="account === 'phone'">
+              <a-col :span="7" v-if="accountType === 'phone'">
                 <a-form-item field="isoCode" hide-asterisk hide-label>
                   <a-select size="large" v-model="form.isoCode" allow-search>
                     <template #prefix>
@@ -52,7 +52,7 @@
                 </a-form-item>
               </a-col>
               <!-- 手机注册 -->
-              <a-col :span="10" v-if="account === 'phone'">
+              <a-col :span="10" v-if="accountType === 'phone'">
                 <a-form-item
                   field="phone"
                   hide-asterisk
@@ -68,7 +68,7 @@
                 </a-form-item>
               </a-col>
               <!-- 邮箱注册 -->
-              <a-col :span="17" v-if="account === 'email'">
+              <a-col :span="17" v-if="accountType === 'email'">
                 <a-form-item
                   field="email"
                   hide-asterisk
@@ -107,12 +107,12 @@
                             <icon-shake
                               style="font-size: 18px"
                               v-show="!sendedCaptcha"
-                              v-if="account === 'phone'"
+                              v-if="accountType === 'phone'"
                             />
                             <icon-at
                               style="font-size: 18px"
                               v-show="!sendedCaptcha"
-                              v-if="account === 'email'"
+                              v-if="accountType === 'email'"
                             />
                             <icon-loading
                               style="font-size: 18px"
@@ -197,9 +197,9 @@
                 content="邮箱"
                 position="top"
                 mini
-                v-if="account === 'phone'"
+                v-if="accountType === 'phone'"
               >
-                <a-button size="large" shape="round" @click="account = 'email'">
+                <a-button size="large" shape="round" @click="accountType = 'email'">
                   <template #icon>
                     <icon-email style="font-size: 20px" />
                   </template>
@@ -209,9 +209,9 @@
                 content="手机"
                 position="top"
                 mini
-                v-if="account === 'email'"
+                v-if="accountType === 'email'"
               >
-                <a-button size="large" shape="round" @click="account = 'phone'">
+                <a-button size="large" shape="round" @click="accountType = 'phone'">
                   <template #icon>
                     <icon-mobile style="font-size: 20px" />
                   </template>
@@ -265,7 +265,7 @@ import codes from "country-calling-code";
 import "/node_modules/flag-icons/css/flag-icons.min.css";
 import axios from "axios";
 const router = useRouter();
-const account = ref("phone");
+const accountType = ref("phone");
 const timeCount = ref(60);
 const checked = ref(false);
 const captcha = ref("");
@@ -309,7 +309,7 @@ const handleSubmit = async ({ values, errors }) => {
     }
   }
 };
-// 发送验证码
+// TODO 发送验证码
 function sendCaptcha() {
   if (sendedCaptcha.value) return;
   sendedCaptcha.value = "123456";

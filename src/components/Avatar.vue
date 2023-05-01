@@ -10,24 +10,23 @@ const store = userStore();
 const props = defineProps({
   size: {
     type: Number,
-    default: 36,
+    default: 40,
   },
   userId: {
-    type: String,
+    // type: String ,
     default: "",
   },
 });
 const avatar = ref("/src/assets/defaultAvatar.png");
-if (props.userId !== "") {
-  axios
-    .get(`/api/user/avatar/${props.userId}`)
-    .then((response) => {
-      avatar.value = `http://127.0.0.1:7001/public/${response.data.avatar}`;
-    })
-    .catch((error) => {
-      throw error;
-    });
-}
+
+axios
+  .get(`/api/user/avatar/${props.userId}`)
+  .then((response) => {
+    if (response.data.avatar) avatar.value = `http://127.0.0.1:7001/public/${response.data.avatar}`;
+  })
+  .catch((error) => {
+    throw error;
+  });
 </script>
 
 <style lang="scss" scoped>

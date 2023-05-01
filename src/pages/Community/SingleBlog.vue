@@ -94,7 +94,7 @@
         <a-col>
           <a-card :bordered="false" class="m-0 p-0">
             <div class="d-flex justify-content-between align-items-center mt-3">
-              <h5 class="fw-bold ms-3">评论 {{ store.topic.replies }}</h5>
+              <h5 class="fw-bold ms-3">评论 {{ comment_count }}</h5>
               <a-radio-group type="button" class="me-3" default-value="recent">
                 <a-radio value="recent">最新</a-radio>
                 <a-radio value="Hottest">最热</a-radio>
@@ -103,9 +103,9 @@
           </a-card>
         </a-col>
       </a-row>
-      <a-row id="height3">
+      <a-row id="height3" class="a-row">
         <a-col>
-          <Comments />
+          <Comments v-for="comment in comments" :comment="comment" :key="comment.id"/>
         </a-col>
       </a-row>
       <!-- #endregion -->
@@ -124,7 +124,7 @@
       <a-row align="center" justify="space-between" class="my-4">
         <a-col class="d-flex justify-content-between">
           <a-checkbox value="1">Subscribe to this topic.</a-checkbox>
-          <a-button size="large" type="primary">Reply</a-button>
+          <a-button size="large" type="primary" @click="reply()">Reply</a-button>
         </a-col>
       </a-row>
       <!-- #endregion -->
@@ -189,6 +189,7 @@ import axios from "axios";
 import moment from "moment";
 import { useRoute } from "vue-router";
 import { userStore } from "@/store/user";
+const route = useRoute();
 const store = userStore();
 const topic = reactive({
   time: "",
@@ -198,21 +199,19 @@ const topic = reactive({
   extraInfo: {},
   replyCount: "111",
 });
-const user_id = 1;
-const tempNum = topic.replyCount;
-const route = useRoute();
+const blog_id = route.params.blog_id;
+// #region Axios从后端获取文章
+const getBlog = async () => {
+  const response = await axios.get(`/api/getBlog/${ route.params.blog_id}`);
+  return response.data;
+};
+const blog = await getBlog();
+// #endregion
 const newReply = ref("");
 let postList = ref([]);
 axios.get("/api/generateHomePosts").then((response) => {
   postList.value = response.data;
 });
-// #region Axios从后端获取文章
-const getBlog = async () => {
-  const response = await axios.get(`/api/getBlog/${route.params.blog_id}`);
-  return response.data;
-};
-const blog = await getBlog();
-// #endregion
 //#region Axios从后端获取标签和分类
 const getCategory = async () => {
   const response = await axios.get(`/api/getCategory/${blog.id}`);
@@ -229,9 +228,9 @@ const Tags = await getTags();
 const checkLikeable = async () => {
   const response = await axios.get("/api/isLiked", {
     params: {
-      user_id: 1,
-      likeable_id: blog.id,
-      likeable_type: "blog",
+      user_id: store.userId,
+      post_id: blog.id,
+      post_type: "blog",
     },
   });
   let res = await response.data;
@@ -243,16 +242,16 @@ const liked_count = ref(blog.liked_count);
 function like() {
   console.log(isLiked);
   if (isLiked) {
-    axios.delete(`/api/dislike/${user_id}/blog/${blog.id}`).then(() => {
+    axios.delete(`/api/dislike/${store.userId}/blog/${blog.id}`).then(() => {
       --liked_count.value;
       isLiked = false;
     });
   } else {
     axios
       .post("/api/like", {
-        likeable_id: blog.id,
-        likeable_type: "blog",
-        user_id: 1,
+        post_id: blog.id,
+        post_type: "blog",
+        user_id: store.userId,
       })
       .then(() => {
         ++liked_count.value;
@@ -265,7 +264,7 @@ function like() {
 const checkCollected = async () => {
   const response = await axios.get("/api/isCollected", {
     params: {
-      user_id: 1,
+      user_id: store.userId,
       likeable_id: blog.id,
       likeable_type: "blog",
     },
@@ -279,7 +278,7 @@ const collected_count = ref(blog.collected_count);
 function collect() {
   console.log(isCollected);
   if (isCollected) {
-    axios.delete(`/api/uncollect/${user_id}/blog/${blog.id}`).then(() => {
+    axios.delete(`/api/uncollect/${store.userId}/blog/${blog.id}`).then(() => {
       --collected_count.value;
       isCollected = false;
     });
@@ -288,15 +287,38 @@ function collect() {
       .post("/api/collect", {
         post_id: blog.id,
         post_type: "blog",
-        user_id: 1,
+        user_id: store.userId,
       })
       .then(() => {
         ++collected_count.value;
-        isCollected = true;
       });
   }
 }
 // #endregion
+//#region 评论功能
+const comment_count = ref(blog.comment_count);
+function reply() {
+  axios
+    .post("/api/comment/reply", {
+      user_id: store.userId,
+      post_id: blog.id,
+      post_type: "blog",
+      content: newReply.value,
+    })
+    .then(() => {
+      ++comment_count.value;
+      newReply.value = "";
+    });
+}
+// #endregion
+//#region 获取评论数据
+const getComments = async () => {
+  const res = await axios.get(`/api/comment/getComments/${blog_id}`);
+  return res.data;
+};
+const comments = await getComments();
+console.log(comments);
+//#endregion
 // #region 获取并加工文章标题
 const a = blog.content.match(/<h[1-6]>([\s\S]*?)<\/h[1-6]>/g) || [];
 function handleBody() {
@@ -392,5 +414,10 @@ onMounted(() => {
   &:hover {
     color: rgb(var(--arcoblue-6));
   }
+}
+.a-row{
+  padding-bottom: 1rem;
+  position: relative;
+  background-color: var(--color-bg-2);
 }
 </style>
